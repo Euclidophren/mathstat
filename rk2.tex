@@ -1,0 +1,789 @@
+\documentclass[a4paper, 12pt]{article}
+
+%%% Работа с русским языком
+\usepackage{cmap}                   % поиск в PDF
+\usepackage{mathtext}               % русские буквы в формулах
+\usepackage[T2A]{fontenc}          % кодировка
+\usepackage[english, russian]{babel}    % локализация и переносы
+\usepackage{color}                  % цветные буковки
+\usepackage[top=20mm, bottom=20mm, left=30mm, right=15mm]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath, amsfonts, amssymb, mathtools} 
+\usepackage{amsthm}
+\usepackage{listings, listingsutf8}
+\usepackage{extarrows}
+\usepackage{ulem}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}[section]
+
+\theoremstyle{leads}
+\newtheorem{leads}{Следствие}
+
+\theoremstyle{example}
+\newtheorem{example}{Пример}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Замечание}
+% Бесконечная последовательность 
+\newcommand{\infseq}[3]{%
+	\ensuremath{#1_#2, \dots, #1_#3, \dots}\ }
+
+% Бесконечная последовательность X_1, ... X_n, ...
+\newcommand{\infseqX}{%
+	\infseq{X}{1}{n}}
+
+\thispagestyle{empty}
+\begin{document}
+\begin{center}
+	\Large
+	Московский государственный технический университет имени~Н.\,Э.\,Баумана
+\end{center}
+
+\hfill\begin{minipage}{0.77\textwidth}
+	{\large
+		\noindent
+		Факультет: Фундаментальные науки\\[2mm]
+		\noindent
+		Кафедра:  Математическое моделирование\\[2mm]
+		\noindent
+		Дисциплина: Математическая статистика 
+		\vspace{1.5cm}}
+\end{minipage}
+\vfill
+
+\begin{center}
+	\Large
+	\textbf{Теория к РК по модулю 2 \\}
+\end{center}
+\vfill
+
+\hfill\begin{minipage}{0.35\textwidth}
+	Выполнила: Покасова А.И.\\
+	Группа:ИУ7-61 \\
+\end{minipage}
+\vfill
+
+\begin{center}
+	Москва, \the\year\space г.
+\end{center}
+
+\newpage
+	Пусть Х -- случайная величина, закон распределения которой неизвестен(известен не полностью).
+	\begin{definition}
+		Статистической гипотезой называется любое утверждение относительно закона распределения случайной величины X.
+	\end{definition}
+	\begin{definition}
+		Статистическая гипотеза называется простой, если она однозначно определяет закон распределения случайной величины Х(однозначно задает функцию распределения случайной величины Х как функцию своего аргумента). В противном случае статистическая гипотеза называется сложной.
+	\end{definition}
+    \begin{definition}
+	    Статистическая гипотеза называется параметрической, если она является утверждением относительно значений неизвестного параметра известного закона распределения.	
+    \end{definition}
+\section{Проверка статистических гипотез}
+	Проверку статистической гипотез обычно формулируют следующим образом:
+	\begin{enumerate}
+		\item Формулируют основную гипотезу $H_0$
+		\item Формулируют конкурирующую гипотезу $H_1$. 
+		$H_0 \cap H_1 = \emptyset$, но, возможно, $H_0$ и $H_1$ не исчерпывают все возможные случаи.
+		\item На основании имеющейся выборки $\vec{x} \in \chi_n$ принимают решение об истинности $H_0$ и $H_1$.
+	\end{enumerate}
+	\begin{definition}
+		Правило, посредством которого принимается решение об истинности $H_0$ или $H_1$ называется статистическим критерием проверки гипотезы.
+	\end{definition}
+	
+	 Задают критерий проверки статистической гипотезы обычно с помощью критического множества $W \in \chi_n$. При этом решающее правило имеет вид: \newline
+	$ \vec {x} \in W \Longrightarrow \left \{
+	\begin{array}{ccc}
+	\text{отклоняют } H_0\\
+	\text{принимают } H_1\\
+	\end{array}
+	\right.$ \quad
+		$ \vec {x} \notin W \Longrightarrow \left \{
+	\begin{array}{ccc}
+	\text{принимают } H_0\\
+	\text{отклоняют } H_1\\
+	\end{array}
+	\right.$
+\newtheorem*{remark1}{Замечание}	
+\begin{remark1}
+	\begin{enumerate}
+		\item Задать критерий проверки гипотез и задать критическое множество -- одно и то же
+		\item При использовании любого критерия возможны ошибки двух видов:
+		\begin{enumerate}
+			\item принять конкурирующую гипотезу при истинности основной гипотезы -- ошибка первого рода: $P\{\vec{x} \in W | H_0\} = \alpha$
+			\item принять основную гипотезу при истинности конкурирующей -- ошибка второго рода: $P\{\vec{x} \notin W| H_1\} = \beta$
+		\end{enumerate}
+	\end{enumerate}
+\end{remark1}
+\begin{definition}
+	$\alpha$ называется уровнем значимости, а $1 - \beta$ -- мощностью критерия.
+\end{definition}
+
+\emph{Критерий Неймана-Пирсона}	
+
+
+Пусть:
+\begin{enumerate}
+	\item X -- случайная величина
+	\item $F(x, \theta)$ -- функция распределения случайной величины X
+	 (известны общий вид функции F, но она зависит от неизвестного параметра $\theta$)
+\end{enumerate}
+
+	При построении критерия для проверки статистических гипотез, как правило, исходят из необходимости максимизации его мощности  $1 - \beta$ (минимизация вероятности совершения ошибки второго рода) при фиксированном уровне значимости $\alpha$ критерия.
+	
+	Введём в рассмотрение статистику:
+	 
+	 \begin{center}
+	 	\centering
+	 	$\phi(\vec{X}) = \frac{L(\vec{X}; \theta_1)}{L(\vec{X}; \theta_0)}$,
+	 \end{center}
+ где  $L(\vec{X}; \theta)$ -- функция правдоподобия.
+
+\begin{definition}
+ Статистика $\phi(\vec{X})$ называется отношением правдоподобия. 	
+\end{definition}
+ 
+Критическое множество должно иметь вид: 
+\begin{equation*}
+	W = \{\vec{x} \in \chi_n: \phi(\vec{X}) \geq C_{\phi}\},
+\end{equation*}
+где константа C выбирается из условия 
+\begin{equation*}
+	\alpha = P\{\phi(\vec{X}) \geq C_{\phi} | \theta = \theta_0\}
+\end{equation*}
+
+Пример. Пусть $X \sim N(m, \sigma^2)$, где m -- неизвестно, $\sigma^2$ -- известно.
+
+Рассмотрим задачу проверки двух простых гипотез 
+$H_0 = \{m = m_0\}, \quad H_1 = \{m = m_1\}$, где $m_0 < m_1$.
+
+В этом примере функция правдоподобия имеет вид:
+\begin{equation*}
+L(X_1, \dots, X_n, m) = (\frac{1}{\sqrt{2 \pi} \sigma})^n e^{- \frac{1}{2 \sigma^2} \sum_{i=1}^{n}(x_i - m)^2}
+\end{equation*}
+
+Тогда отношение правдоподобия:
+
+\begin{center}
+	\centering
+	$\phi(\vec{X}) = \frac{L(\vec{X}, m_1)}{L(\vec{X},m_0)} = 
+	\frac{e^{- \frac{1}{2 \sigma^2} \sum_{i=1}^{n}(x_i - m_1)^2}}{e^{- \frac{1}{2 \sigma^2} \sum_{i=1}^{n}(x_i - m_0)^2}} = $
+\end{center}
+\begin{equation}
+	e^{- \frac{1}{2\sigma^2} \sum_{i=1}^{n} [(x_i - m_1)^2 - (X_i - m_0)^2]} = e^{-\frac{1}{2\sigma^2} \sum_{i=1}^{n} [x_i^2 - 2x_im_1 + m_1^2 - x_i^2 + 2x_im_0 - m_0^2]} = e^{\frac{m_1 - m_0}{\sigma^2} \sum_{i=1}^{n}x_i - \frac{n}{2\sigma^2}[m_1^2 - m_0^2]}
+\end{equation}
+
+Выше было показано, что критическое множество должно иметь вид
+\begin{equation*}
+	W = \{\vec{X}: \phi(\vec{X}) \geq C_\phi\},
+\end{equation*}
+где $C_\phi = const$ выбирается из условия 
+\begin{equation*}
+	P\{\phi(\vec{X}) \geq C_\phi | H_0\} = \alpha
+\end{equation*}
+
+Условие 
+\begin{center}
+	\centering
+	$\phi(\vec{X}) \geq C_\phi <=> ln \phi(\vec{X}) \geq ln C_\phi <=> |\text{см.(2)}| <=> ln[e^{\frac{m_1 - m_0}{\sigma^2} \sum_{i=1}^{n}X_i - \frac{n}{2\sigma^2}(m_1^2 - m_0^2)}] \geq$  
+\end{center}
+\begin{center}
+	\centering
+	$lnC_\phi <=> \frac{m_1 - m_0}{\sigma^2} \sum_{i=1}^{n} X_i - \frac{n}{2\sigma^2}(m_1^2 - m_0^2) \geq ln C_\phi <=> \frac{m_1^2 - m_0^2}{\sigma^2} \sum_{i=1}^{n}X_i \geq ln C_\phi  + \frac{n}{2 \sigma^2(m_1^2 - m_0^2) <=>}$
+\end{center}
+\begin{center}
+	\centering
+	$\text{С учетом того, что} m_1 > m_0 <=> \sum_{i=1}^{n} X_i \geq \frac{\sigma^2}{m_1 - m_0}[ln C_\phi - \frac{n}{2 \sigma^2}[m_1^2 - m_0^2]], \quad C = const$  
+\end{center}
+Таким образом, 
+\begin{equation*}
+W = \{\vec{X} \in \chi_n : \sum_{i=1}^{n} X_i \geq C_\phi\},
+\end{equation*}
+где C выбирается из условия
+\begin{equation*}
+	\alpha = P\{\phi(\vec{X} \geq C_\phi | H_0)\} = P\{\sum_{i=1}^{n} X_i \geq C_\phi | m = m_0\}
+\end{equation*}
+Если истинна $H_0$, т.е. $m = m_0$, то случайная величина $\sum_{i=1}^{n} X_i \sim N(nm_0, n\sigma^2)$ |$X_i \sim X \sim N(m_0, \sigma^2)$|.
+
+Таким образом, $\alpha = P\{\sum_{i=1}^{n}X_i \geq C | m = m_0 \} = 1 - P\{\sum_{i=1}^{n}X_i \leq C | m = m_0\} = 1 - \Phi(\frac{C - nm_0}{\sqrt{n \sigma^2}})$, то есть $\Phi(\frac{C - nm_0}{\sqrt{n \sigma^2}}) = 1 - \alpha$.
+
+Таким образом, $\frac{C - nm_0}{\sqrt{n\sigma^2}} = u_{1 - \alpha}, C = \sigma u_{1 - \alpha} \sqrt{n} + nm_0$.
+
+Таким образом, критерий имеет вид
+\begin{center}
+	\centering
+	$\sum_{i=1}^{n} X_i \geq \sigma u_{1 - \alpha} \sqrt{n} + nm_0 \rightarrow \left \{ \text{принять  } H_1, \text{отклонить  } H_0 \right\}$
+\end{center}
+\begin{center}
+	\centering
+	$\sum_{i=1}^{n} < \sigma u_{1 - \alpha} \sqrt{n} + nm_0 \left \{ \text{принять  } H_0 , \text{отклонить  } H_1\right \}$
+\end{center}
+ При этом вероятность совершения ошибки 1-го рода 
+ \begin{equation*}
+ 	p = P\{\vec{X} \notin W | H_1\} = P\{\sum_{i=1}^{n} < C | m = m_0 \} = |C = \sigma u_{1 - \alpha \sqrt{n} + nm_0}, \text{при} m = m_1 : \sum_{i=1}^{n}X_i \sim N(nm_1, n\sigma^2)| = \Phi\frac{(\sigma u_{1 - \alpha} \sqrt{n} + nm_0) - nm_1)}{\sigma \sqrt{n}} 
+ \end{equation*}
+ \begin{equation*}
+ \Phi(\frac{\sigma u_{1 - \alpha}\sqrt{n} - n(m_1 - m_0)}{\sigma \sqrt{n}}) = \Phi(u_{1 - \alpha} - \sqrt{n} \frac{m_1 - m_0}{n})
+ \end{equation*}
+
+\emph{Проверка сложных параметрических гипотез}
+
+	Пусть
+	\begin{itemize}
+		\item X -- случайная величина
+		\item  $F(x, \theta)$ -- функция распределения случайной величины X(общий вид функции F известен, но F зависит от неизвестного параметра $\theta$)
+	\end{itemize}
+
+ Рассмотрим задачу проверки двух сложных гипотез: 
+ $H_0 = \{\theta \in \Theta_0\}$ и $H_1 = \{\theta \in \Theta_1\}$, где $\theta_0 \bigcap \theta_1 = 0$.
+ \begin{itemize}
+ 	\item $\theta_0 = \{\theta > \theta_0\}, \theta_1 = \{\theta < \theta_1\}$
+ 	\item $\theta = \{\theta < \theta_0\}, \theta_1 = \{\theta > \theta_1\}$, где $\theta_0 < \theta_1$. 
+ \end{itemize}
+
+	 В этом случае критерий как и раньше задается с использованием критического множества W, а решающее правило имеет вид:
+	 \begin{center}
+	 	\centering
+	 	$\vec{X} \in W \rightarrow \{\text{принять  } H_1, \text{отклонить } H_0\}$
+	 	
+	 	$\vec{X} \notin W \rightarrow \{\text{принять }H_0, \text{отклонить } H_1\}$
+	 \end{center}
+ При этом ошибки первого и второго рода определяются как и раньше, но теперь их вероятности зависят от  $\theta$.
+ 
+ $\alpha(\theta) = P\{\vec{X} \in W | \theta \in \Theta_0\}$, 
+
+$\beta(\theta) = P\{\vec{X} \in \chi_n \ W | \theta \in \Theta_1\}$.
+
+\begin{definition}
+	Величина $\alpha = sup_{\theta \in \Theta_0} \alpha(\theta)$ называется размером критерия.
+\end{definition}
+
+\begin{definition}
+	Функция $M(\theta) = P\{\vec{X} \in W | \theta\} (*)$ называется функцией мощности критерия.
+\end{definition}
+
+\begin{remark}
+	1) Условие (*), принятое в математической статистике удачней было бы записать в виде 
+	\begin{equation*}
+		M(t) = P\{\vec{X} \in W | \theta = t\},
+	\end{equation*}
+	то есть $M(\theta)$ -- вероятность события $\{\vec{X} \in W \}$ при условии, что неизвестный параметр имеет значение $\theta$.
+	
+	2) Через функцию мощности можно выразить вероятности совершения ошибок первого и второго рода.
+	
+	\begin{equation*}
+		\alpha(\theta) = M(\theta), \quad \theta \in \Theta_0
+		\qquad
+		\beta(\theta) = 1 - M(\theta), \quad \theta \in \Theta_1.
+	\end{equation*}
+\end{remark}
+
+\begin{definition}
+	Критерий, который при заданном размере $\alpha$ максимизирует функцию мощности одновременно по всем возможным критериям при всех $\theta \in \Theta_1$ называется равномерно наиболее мощным критерием.
+\end{definition}
+
+\begin{example}
+	Пусть $X \sim N(m, \sigma^2)$, где m -- неизвестно, $\sigma^2$ --  известна.
+	
+	Рассмотрим задачу проверки гипотез $H_0 = \{m = m_0\}$ и $H_1 = \{m > m_0\}$.
+	
+	1) Ранее была решена задача проверки двух параметрических гипотез $H_0 = \{m = m_0\}$ и $H_1 = \{m = m_1\}$, где $m_1 > m_0$. При этом критическое множество имеет вид: 
+	\begin{equation*}
+		W = \{\vec{X} \in \chi_n: \sum_{i=1}^{n}x_i \geq nm_0 + u_{1 - \alpha} \sigma \sqrt{n}\} (*)
+	\end{equation*}
+	
+	2) Так как построенное выше критическое множество не зависит от $m_1$, то фактически этот критерий является равномерно наиболее мощным для проверки гипотез
+	
+	\begin{equation*}
+		H_0 = \{m = m_0\} \qquad H_1 = \{m > m_0\}
+	\end{equation*}
+	
+	Таким образом, для рассмотренной задачи критическое множество имеет вид (*).
+\end{example}
+
+\begin{example}
+	Пусть $X \sim N(m, \sigma^2)$, где m -- неизвестно, $\sigma^2$ -- неизвестна.
+	
+	Рассмотрим задачу проверки гипотез
+	
+	\begin{equation*}
+		H_0 = \{m = m_0\} \quad vs \quad H_1  = \{m > m_0\} 
+	\end{equation*}
+	
+	В этом примере целесообразно воспользоваться статистикой 
+	\begin{equation*}
+		T(\vec{X}) = \frac{\overline{X} - m_0}{S(\vec{X})} \sqrt{n} \sim(\text{при истинности  } H_0) St(n - 1)
+	\end{equation*}
+	
+	Аналогично предыдущим примерам, критическое множество можно задать в виде 
+	\begin{equation*}
+		W = \{\vec{X} \in \chi_n : T(\vec{X}) \geq t_{1 - \alpha}^{n-1}\},
+	\end{equation*}
+	где $t_{1 - \alpha}^{n - 1}$ -- квантиль уровня $1 - \alpha$  распределения $St(n - 1)$
+	\begin{remark}
+		Пусть в условиях предыдущего примера требуется проверить следующие гипотезы:
+		
+		\begin{itemize}
+			\item $H_0 = \{m = m_0\} \quad vs \quad H_1 = \{m < m_0\}$
+			\item $H_0 = \{m = m_0\} \quad vs \quad H_1 = \{m \neq m_0\}$
+		\end{itemize}
+		Рассуждая аналогично, с использованием статистики 
+		\begin{equation*}
+			T(\vec{X}) = \frac{\overline{X} - m_0}{S(\vec{X})} \sqrt{n}
+		\end{equation*}
+		 зададим критические множества в виде:
+		 \begin{itemize}
+		 	\item $W = \{\vec{X} \in \chi_n : T(\vec{X} \leq -t_{1 - \alpha}^{n - 1})\}$
+		 	\item $W = \{\vec{X} \in \chi_n : |T(\vec{X})| \geq t_{1 - \alpha/2}^{n - 1}\}$
+		 \end{itemize}
+	\end{remark}
+\end{example}
+
+\begin{example}
+	Пусть 
+	\begin{itemize}
+		\item $X \sim N(m_1, \sigma_1^2)$
+		\item $Y \sim N(m_2, \sigma_2^2)$
+		\item $m_1, m_2$ -- неизвестны, $\sigma_1, \sigma_2$ -- известны
+	\end{itemize}
+
+Рассмотрим задачу проверки следующих гипотез:
+
+\begin{itemize}
+	\item $H_0 = \{m_1 = m_2\} \quad vs \quad H_1 = \{m_1 > m_2\}$
+	\item $H_0 = \{m_1 = m_2\} \quad vs \quad H_1 = \{m_1 < m_2\}$
+	\item $H_0 = \{m_1 = m_2\} \quad vs \quad H_1 = \{m_1 \neq m_2\}$ 
+\end{itemize}
+
+Рассмотрим случайную величину $Z = X - Y; MZ = MX - MY$, поэтому сформулированные задачи эквивалентны задачам:
+\begin{itemize}
+	\item $H_0 = \{m = 0\} \quad vs \quad H_1 = \{m > 0\}$
+	\item $H_0 = \{m = 0\} \quad vs \quad H_2 = \{m < 0\}$
+	\item $H_0 = \{m = 0\} \quad vs \quad H_3 = \{m \neq 0\}$, 
+\end{itemize}
+где $m = M[Z]$.
+
+ Рассмотрим статистику 
+ \begin{equation*}
+ 	T(\vec{X}, \vec{Y}) = \frac{\overline{X} - \overline{Y}}{\sqrt{\frac{\sigma_1}{n_1} + \frac{\sigma_2^2}{n_2}}},
+ \end{equation*}
+ где $n_1$ -- объем выборки $\vec{X}$, $n_2 $ -- объем выборки $\vec{Y}$.
+ 
+ Закон распределения случайной величины T при истинности $H_0$:
+ 
+ T является линейно наибольшей нормированной случайной величиной, следовательно T сама имеет нормальное распределение.
+ 
+ \begin{equation*}
+ 	M[T] = \frac{1}{\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}}(M\overline{X} - M\overline{Y}) = \text{при истинности } H_0 = 0
+ \end{equation*}
+ \begin{equation*}
+ 	D[T] = \frac{1}{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}} [D\overline{X} + D\overline{Y}] = \frac{1}{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}[\frac{\sigma_1}{n_1} + \frac{\sigma_2^2}{n_2}] = 1
+ \end{equation*}
+ 
+ Таким образом, при истинности $H_0$  статистика $T \sim N(0,1)$. По этой причине критические множества в каждой из рассмотренных задач имеют вид:
+ \begin{itemize}
+ 	\item $W = \{(\vec{X}, \vec{Y}) \in \chi_n : T(\vec{x}, \vec{y}) \geq u_{1 - \alpha}\}$
+ 	\item $W = \{(\vec{X}, \vec{Y}) \in \chi_n : T(\vec{x}, \vec{y}) \leq - u_{1 - \alpha}\}$
+ 	\item $W = \{(\vec{X}, \vec{Y}) \in \chi_n: |T(\vec{x}, \vec{y})| \geq u_{1 - \alpha/2}\}$
+ \end{itemize}
+\end{example}
+
+\section{Критерии согласия}
+\begin{definition}
+	Первая задача математической статистики.
+	
+	Дано: X -- случайная величина, закон распределения которой неизвестен. Требуется найти закон распределения случайной величины X.
+\end{definition}
+
+\begin{definition}
+	Вторая задача математической статистики.
+	
+	Дано: X -- случайная величина, закон распределения которой известен с точностью до вектора $\vec{\theta}$ неизвестных параметров.
+	
+	Требуется оценить значение $\vec{\theta}$.
+\end{definition}
+
+Решение первой задачи связано с проверкой основной гипотезы:
+
+\begin{equation*}
+	H_0 = \{F(t) \equiv F_0(t)\} = \{(\forall t \in \mathbb{R})(F(t) = F_0(t))\},
+\end{equation*}
+где 
+\begin{itemize}
+	\item $F(t)$ -- функция распределения случайной величины X
+	\item $F_0(t)$ -- некоторая функция распределения
+\end{itemize}
+
+против конкурирующей гипотезы:
+
+\begin{equation*}
+	H_1 = \neg H_0 = \{(\exists t \in \mathbb{R}) (F(t) \neq F_0(t))\}
+\end{equation*}
+
+Гипотеза может быть сложной и иметь вид:
+
+\begin{equation*}
+	H_0 = \{(\exists \vec{\theta_0})(\forall t \in \mathbb{R})(F(t) = F_0(t, \vec{\theta})\},
+\end{equation*}
+
+где 
+\begin{itemize}
+	\item $F(t)$ -- функция распределения случайной величины X
+	\item $F_0(t, \vec{\theta})$ -- некоторая функция распределения, известная с точностью до вектора распределения $\theta$
+\end{itemize}
+
+При этом конкурирующая гипотеза
+
+\begin{equation*}
+	H_1 = \neg H_0 = \{(\forall \vec{\theta}) (\exists t \in \mathbb{R})(F(t) \neq F_0(t, \vec{\theta}))\}
+\end{equation*}
+
+Проверка основной гипотезы $H_0$ сводится к оценке величины 
+\begin{center}
+	\centering
+	$\Delta (F_n, F_0)$
+\end{center}  
+рассогласования эмпирической функции распределения и предполагаемой функции распределения  $F_0$.
+
+\begin{definition}
+	Критерием согласия  называется статистический критерий, предназначенный для проверки корректности гипотезы о том, что предполагаемый закон распределения $F_0(t, \vec{\theta)}$ случайной величины X соответствует экспериментальным данным, представленным эмпирической функцией распределения $F_n(t)$.
+\end{definition}
+
+\subsection{Критерий Колмогорова}
+
+Для простой гипотезы:
+
+Пусть:
+\begin{itemize}
+	\item X -- непрерывная случайная величина
+	\item $\vec{X}$ -- случайная выборка из генеральной совокупности $\vec{X}$.
+\end{itemize}
+
+Рассмотрим задачу проверки гипотезы 
+\begin{equation*}
+	H_0 = \{F(t) \equiv F_0(t)\} \quad vs \quad H_1 = \neg H_0
+\end{equation*}
+
+\begin{remark}
+	Здесь $F_0(t)$ -- полностью известная функция распределения, которая не зависит ни от каких неизвестных параметров. По этой причине $H_0$ -- простая гипотеза.
+\end{remark}
+
+Для решения этой задачи рассмотрим статистику 
+\begin{center}
+	\centering
+	$\Delta(\vec{X})$,
+\end{center}
+
+реализации которой определяются соотношением
+
+\begin{center}
+	$\Delta(\vec{X}) = sup_{t \in \mathbb{R}} |F_n(t) - F_0(t)|$,
+\end{center}
+где $F_n(t)$ -- эмпирическая функция распределения, построенная по выборке $\vec{x}$.
+
+Очевидно. что <<малое>> значение статистики $\Delta$ свидетельствуют об истинности $H_0$, а <<большие>> -- об истинности $H_1$.
+
+По этой причине критическое множество имеет вид
+
+\begin{equation*}
+	W = \{ \vec{x} \in \chi_n : \Delta(\vec{X}) \geq \delta_{1 - \alpha} \},
+\end{equation*}
+где $\delta_{1 - \alpha}$ -- квантиль уровня $1 - \alpha$ закона распределения случайной величины $\Delta(\vec{X})$.
+
+При этом решающее правило имеет вид: 
+\begin{center}
+	\centering
+	$\vec{x} \in W \rightarrow \text{принять  } H_1,  \text{отклонить } H_0$,
+	
+	$\vec{x} \in \overline{W} \rightarrow \text{принять } H_0, \text{отклонить  } H_1$
+\end{center}
+
+\subsection{Критерий $\chi^2$ для простой гипотезы}
+
+Пусть 
+
+\begin{itemize}
+    \item X -- дискретная случайная величина
+    \item X может принимать конечное множество значений $a_1, \dots. a_n$ с неизвестными вероятностями $p_1, \dots, p_l$.	
+\end{itemize}
+
+Требуется проверить основную гипотезу
+
+\begin{equation*}
+	H_0 = \{p_1 = p_1^0, \dots, p_l = p_l^0\}, 
+\end{equation*}
+
+где $p_1^0, \dots, p_l^0$ -- некоторые известные значения,
+
+против
+
+\begin{equation*}
+	H_1 = \neg H_0 = \{k \in \{1, \dots, l\} : p_k \neq p_k^0\} 
+\end{equation*}
+
+Для решения этой задачи рассмотрим статистики
+
+$n_1(\vec{X}), \dots, n_l(\vec{X})$, где выборочное значение $n_k(\vec{x})$ = $\{\text{количество элементов выборки} \vec{x}, \text{которые имеют значение} a_k \}$
+
+\begin{remark}
+	Очевидно, что 
+	\begin{equation*}
+		n_1(\vec{X}) + \dots + n_l(\vec{X}) = n,
+	\end{equation*}
+	поэтому случайные величины $n_1(\vec{X}), \dots, n_l(\vec{X})$ -- зависимы.
+\end{remark}
+
+\newtheorem*{Piersonn}{Теорема Пирсона}
+\begin{Piersonn}
+Пусть выполняются сделанные выше предположения.
+
+Тогда при истинности $H_0$ последовательность случайных величин
+
+\begin{center}
+	\centering
+	$$\sum_{i=1}^{l} \frac{n_k(\vec{X} - np_k)^2}{n p_k}$$
+\end{center}
+
+слабо сходится к случайной величине, имеющей распределение $\chi^2(l - 1)$
+\end{Piersonn}
+
+Согласно этой теореме, при $n \longrightarrow \inf$ случайная величина
+
+\begin{equation*}
+	\Delta(\vec{X}) = \sum_{i=1}^{l} \frac{(n_k(\vec{X}) - n p_k^0)^2}{n p_k} = n \sum_{i=1}^{l} \frac{\frac{n_k(\vec{X})}{n} - p_k^0}{p_k^0}
+\end{equation*}
+сходится к случайной величине, распределенной по закону $\chi^3(l - 1)$.
+
+Очевидно, что истинность основной гипотезы $H_0$ ассоциируется с малыми значениями статистики $\Delta(\vec{X})$, а истинность конкурирующей гипотезы $H_1$ -- с <<большими>> положительными значениями. По этой причине критическое множество можно задать в следующем виде:
+
+\begin{equation*}
+	W = \{ \vec{x} \in \chi_n : \Delta(\vec{x}) \geq h_{1 - \alpha}^{l - 1} \},
+\end{equation*}
+где $h_{1 - \alpha}$ -- квантиль уровня $1 - \alpha$ распределения $\chi^2 (l - 1)$
+
+
+\subsection{Критерий Колмогорова для сложной гипотезы}
+
+Требуется проверить гипотезу о принадлежности закону распределения случайной величины X заданному классу. По этой причине основная гипотеза $H_0$ будет сложной: 
+\begin{equation*}
+	H_0 = \{ (\exists \vec{\theta}) (\forall t \in \mathbb{R}) (F(t) = F_0(t, \theta)) \},
+\end{equation*}
+
+где 
+\begin{itemize}
+	\item $F(t)$ -- теоретический (расово верный) закон распределения случайной величины X
+	\item $F_0(t)$ -- предполагаемый закон распределения случайной величины X
+	\item $\theta$ -- вектор параметров закона $F_0$
+\end{itemize}
+
+Конкурирующая гипотеза $H_1 = \neg H_0$.
+
+Для решения задачи:
+
+\begin{enumerate}
+	\item построить точечную оценку $\hat{\vec{X}}$ для значения вектора параметров $\vec{\theta}$
+	\item использовать критерий Колмогорова для проверки простой гипотезы 
+	
+	$H_0 = \{ F(t) \equiv F_0(t, \hat{\vec{\theta}}(\vec{X})\}$,
+\end{enumerate}
+
+где $\hat{\vec{\theta}}$ -- выборочное значение построенной оценки.
+
+Недостаток: критерии перестают быть параметрическими, так как распределение модифицированной статистики 
+\begin{equation*}
+	\Delta(\vec{X}) = sup_{t \in \mathbb{R}} |F(t) - F_0(t, \hat{\vec{\theta}})|
+\end{equation*}
+
+зависит от выбранной точечной оценки, то есть от закона распределения случайной величины $\hat{\vec{\theta}}$.
+
+Однако можно показать, что, если 
+
+\begin{enumerate}
+	\item  $\hat{\vec{\theta}}$ -- оценка максимального правдоподобия для вектора $\theta$
+	\item Элементы $F_0(t, \vec{\theta})$ параметрического семейства получаются из какого-нибудь одного своего представителя с использованием преобразований сдвига и масштаба (вдоль оси O t), то есть 
+	\begin{equation*}
+		F_0(t, \vec{\theta}) = \tilde{F_0}(\frac{t - a}{b}),
+	\end{equation*}
+	где  $\tilde{F_0}$ -- какая-то фиксированная функция рассматриваемого семейства $F_0(t, \vec{\theta})$, а в-е значения которых зависят от значения $\vec{\theta}$  в левой части, то для использования критерия Колмогорова достаточно иметь только  одну таблицу квантилей для каждого семейства.
+\end{enumerate}
+
+\subsection{Критерий $\chi^2$ для сложной гипотезы}
+Пусть 
+\begin{enumerate}
+	\item X -- дискретная случайная величина
+	\item X может принимать значения $a_1, \dots, a_l$ с неизвестными вероятности $p_1, \dots, p_l$
+	\item эти вероятности $p_k, k = \overline{1; l}$, зависят от неизвестных параметров $\vec{\theta}$, где $\vec{\theta} \in \Theta$, то есть в отличии от критерия для простой гипотезы теперь $p_k = p_k(\vec{\theta}), \theta \in \Theta, k = \overline{1; l}$ 
+\end{enumerate}
+
+По этой причине основную гипотезу можно записать в виде:
+
+\begin{equation}
+	H_0 = \{P\{X = a_k\} = p_{k_0}(\vec{\theta}), k = \overline{1; l}\}, 
+\end{equation}
+где $p_{k_0}(\vec{\theta})$ -- известные функции, предполагаемые в зависимости вероятностей $p_k$ от параметров $\vec{\theta}$.
+
+$P\{X = a_k\} = p_k(\vec{\theta})$ -- теоретические(расово верные) зависимости этих вероятностей от параметров; эти зависимости нам неизвестны.
+
+Конкурирующую гипотезу выбирают такой: $H_1 = \neg H_0$
+
+Для решения:
+
+\begin{enumerate}
+	\item сначала строят оценку максимального правдоподобия для вектора $\vec{\theta} : \hat{\vec{\theta}(\vec{X})}$
+	\item вычисляют выборочное значение $\hat{\vec{\theta}(\vec{x})}, n_k(\vec{x})$
+	\item рассматривают статистику 
+	 \begin{equation*}
+	 	\chi^2(\vec{X}) = \sum_{i=1}^{l} \frac{[n_k(\vec{X} - np_k(\hat{\vec{\theta}(\vec{X})}))]^2}{np_{k_0}(\hat{\vec{\theta}}(\vec{X}))} = n \sum_{i=1}^{l}\frac{[\frac{n_k(\vec{X})}{n} - p_{k_0}(\hat{\vec{\theta}})(\vec{X})]^2}{p_{k_0}(\hat{\vec{\theta}}(\vec{X}))},
+	 \end{equation*}
+	 которая в случае выполнения определенных условий гладкости функций $p_{k_0}(\vec{\theta})$ при $n \longrightarrow \inf$ слабо сходится к случайной величине, имеющей распределение $\chi^{2 l - r - 1}$, где r -- размерность вектора $\theta$.
+	 \item поскольку при истинности основной гипотезы $H_0$ статистика $\chi^2(\vec{X})$ принимает <<малые>> значения, а при истинности $H_1$ -- <<большие>> положительные значения, критическое множество можно записать в виде 
+	 \begin{equation*}
+	 	W = \{\vec{x} : \chi^2(\vec{x}) \geq h_{1 - \alpha}^{l-r-1} \},
+	 \end{equation*}
+	 где $h_{1 - \alpha}^{l-r-1}$ -- квантиль уровня $1 - \alpha$ распределения $chi^2(l-r-1)$
+\end{enumerate}
+
+\begin{remark}
+	О построении оценки максимального правдоподобия в рассматриваемом случае.
+	
+	При истинности $H_0$ функция правдоподобия имеет следующий вид:
+	
+	\begin{equation*}
+		L(\vec{X}, \vec{\theta}) = \prod_{j=1}^{n} P\{X = X_j\} = \frac{n!}{n_1! \centerdot \dots \centerdot n_k!} \prod_{k=1}^{l}[p_{k_0}(\vec{\theta})]^{n_k(\vec{X})},
+	\end{equation*}
+	
+	где  $\sum_{k=1}^{l}n_k(\vec{X}) = n$.
+	
+	Тогда уравнения правдоподобия
+	
+	\begin{equation*}
+		\frac{\partial ln L}{\partial \theta_j} = 0, \quad j = \overline{1; r},
+	\end{equation*}
+	примут вид:
+	
+	\begin{equation*}
+		\sum_{k=1}^{l} \frac{n_k(\vec{X})}{p_{k_0}(\vec{\theta})} \centerdot \frac{\partial p_{k_0}(\theta)}{\partial \theta_j} = 0, \quad j = \overline{1; r}
+	\end{equation*}
+\end{remark}
+
+\subsection{Критерий Смирнова}
+
+Пусть 
+\begin{enumerate}
+	\item X, Y -- случайные величины
+	\item $F(t)$ -- функция распределения случайной величины X, 
+	$G(t)$ -- функция распределения случайной величины  Y
+	\item $\vec{X}$ -- случайная выборка из генеральной совокупности X(объем $n_1$), $\vec{Y}$ -- случайная выборка из генеральной совокупности $Y$(объем $n_2$)
+\end{enumerate}
+
+Требуется проверить гипотезу
+\begin{equation*}
+H_0 = \{X, Y \text{одинаково распределены}\} = \{(\forall t \in \mathbb{R}) (F(t) = G(t))\} \quad vs \quad H_1 = \neg H_0 
+\end{equation*} 
+
+Если случайные величины X и Y непрерывны, то для решения этой задачи можно использовать статистику $\Delta(\vec{X}, \vec{Y})$, выборочное значение которой определяется формулой 
+\begin{equation}
+	\Delta(\vec{X}, \vec{Y}) = sup_{t \in \mathbb{R}} |F_{n_1}(t) - G_{n_2}(t)|,
+\end{equation}
+где $F_{n_1}(t), G_{n_2}(t)$ -- эмпирические функции распределения, отвечающие выборкам $\vec{x}$ и $\vec{y}$.
+
+Если истинно $H_0$, то в соответствии с теоремой о сходимости эмпирической функции распределения к теоретической функции распределения заключаем, что при достаточно больших  $n_1, n_2$ значения статистики должны быть <<малыми>>, а при истинности $H_1$ -- <<большими>>. По этой причине критическое множество можно задать в виде:
+
+\begin{equation*}
+	W = \{(\vec{x}, \vec{y}) : \Delta(\vec{X}, \vec{Y}) \geq \delta_{1 - \alpha}\},
+\end{equation*}
+
+где $\alpha \in (0,1)$ -- заданный уровень значимости критерия, а $\delta_{1 - \alpha}$ -- квантиль уровня $1 - \alpha$ закона распределения статистики $\Delta$ при истинности  $H_0$.
+
+\begin{remark}
+	О законе распределения статистики $\Delta(\vec{X}, \vec{Y})$.
+	\begin{itemize}
+		\item Доказано, что при истинности $H_0$ закон распределения статистики $\Delta$ не зависит от $F(t)$ -- теоретического закона распределения случайной величины X
+		\item для небольших $n_1, n_2$ соответствующие распределения табулированы
+		\item Смирнов доказал, что для $t > 0$
+		\begin{center}
+			\centering
+			$P\{\sqrt{\frac{n_1 n_2}{n_1 + n_2}}\Delta(\vec{X}, \vec{Y}) < t\} \rightarrow_{n_1 \rightarrow \infty, n_2 \rightarrow \infty} K(t)$,
+		\end{center}
+	где $K(t) = \sum_{k= - \infty}^{\infty} (-1)^k e^{-2k^2t^2}$
+	\end{itemize}
+
+При достаточно больших $n_1, n_2$ можно считать, что случайная величина 
+\begin{equation*}
+	A = \sqrt{\frac{n_1 n_2}{n_1 + n_2}} \Delta(\vec{X}, \vec{Y})
+\end{equation*}
+имеет своей функцией распределения $K(t), t > 0$.
+\end{remark}
+
+\section{Регрессионный анализ}
+
+Основные задачи регрессионного анализа -- задачи, связанные с установкой стохастических зависимостей между случайной величиной Y и детерминированными $X_1, \dots, X_p$, носящими количественный характер.
+
+\begin{definition}
+	Y стохастически зависит от $X_1, \dots, X_p$, если на изменение значений $X_1, \dots, X_p$ реагирует изменением своего закона распределения.
+\end{definition}
+
+\begin{definition}
+	Модель $\hat{\Phi(t)} = \theta_1\Psi_1(t) + \dots + \theta_p\Psi(t)$, где $\Psi_j(t)$ -- известная базовая функция, $\theta_j, j = \hat{1,p}$ -- неизвестные параметры, называется линейной по параметрам, если каждый входящий в правую часть параметр входит линейно.
+\end{definition}
+
+\begin{definition}
+	Оценкой, полученной методом наименьших квадратов(МНК - оценкой) вектора $\vec{\theta}$ называется такое его значение $\hat{\theta}$, которое дост.наим. значение функционалу $S(\vec{\theta})$, т.е. $S(\hat{\theta}) = min_{\vec{\theta} \in \mathbb{R}^p} S(\vec{\theta})$, где $S(\hat{\theta})$ -- мера близости аппроксимирующей функции $\hat{\Phi}$ и истинной $\Phi$.
+	
+	\begin{equation*}
+		S(\vec{\theta}) = \sum_{i=1}^{n}(y_i - \hat{\Phi}(t_i))^2
+	\end{equation*}
+	
+	Чем более удачно $\vec{\theta}$, тем меньше $S(\vec{\theta})$.
+\end{definition}
+
+\newtheorem*{MNK}{Теорема о вычислении МНК}
+\begin{MNK}
+	Пусть $rg \Psi = p$, тогда $\hat{\theta} = (\Psi^t \Psi)^{-1} \Psi^T \vec{y}$.
+\end{MNK}
+
+\newtheorem*{MNK2}{Теорема о свойствах МНК-оценок}
+\begin{MNK2}
+	Пусть
+	\begin{enumerate}
+		\item $\varepsilon \sim N(0, \sigma^2)$
+		\item Реал. сл. величина $\varepsilon$ в серии из n наблюдений незав.
+		\item $rg \Psi = p$
+		\item $\hat{\theta} = (\Psi^T \Psi)^{-1} \Psi^T\vec{y}$ -- линейная оценка для $\theta$
+	\end{enumerate}
+
+Тогда 
+\begin{enumerate}
+	\item $\hat{\vec{\theta}}$ -- несмещенная оценка $\theta$
+	\item $\hat{\vec{\theta}} \sim N(\vec{\theta}, \varepsilon)$ -- нормальная случайная величина, где  $\varepsilon = \sigma^2(\Psi^T\Psi)^{-1}$
+	\item  Интервальная оценка уровня $1 - \alpha$ для параметра $\theta_j$ имеет вид 
+	\begin{center}
+		\centering
+		$(\hat{\theta_j} - \Delta_j, \hat{\theta_j} + \Delta_j)$
+	\end{center} 
+\end{enumerate}
+где 
+\begin{itemize}
+	\item $\Delta_j = t_{1 - \alpha}^{n - p} \sqrt{\frac{d_j}{n - p} S(\hat{\vec{\theta}})}$
+	\item $t_{1 - \alpha}^{n - p}$ -- квантиль уровня $1 - \alpha  \quad St(n-p)$
+	\item $d_j$ -- j-й элемент главной диагонали матрицы $(\Psi^T\Psi)^{-1}$.
+\end{itemize}
+\end{MNK2}
+\newpage
+\section{Примечания составителя}
+\begin{itemize}
+	\item Основная часть шпоры составлялась к 27.05.19, содержала значительное количество ошибок. В последней версии убраны старые ошибки, добавлены новые\sout{(верность данных уже особо не проверяется, т.к. РК я сдала, мне не актуально)}.
+	
+	\item Пункт <<Пример>> в секции <<Критерий Неймана-Пирсона>> относится к вопросу №3! Все остальное относится к вопросу №2. 
+	
+	Уже 2 человека наебнулись на этом.
+	
+    Берегите себя и своих близких.
+	
+	\item  <<расово верный>> -- шутка, никогда не пишите так в РК(я серьезно, в лекциях этого нет, это все шутки составителя, т.е меня)
+	
+	\item Шпоры распространяются под лицензией WTFPL, делайте с ними что хотите
+	
+	\item Если найдете ошибки в шпорах, создавайте  issue в репозитории  mathstat user-а Euclidophren, или скачайте .tex файл и правьте сами(таки WTFPL), или напишите мне в телеграме(@neoisalie), я исправлю \sout{(или нет, идите нахуй)}.
+\end{itemize}
+\end{document}
