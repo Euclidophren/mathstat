@@ -1,0 +1,872 @@
+\documentclass[a4paper, 12pt]{article}
+
+%%% Работа с русским языком
+\usepackage{cmap}                   % поиск в PDF
+\usepackage{mathtext}               % русские буквы в формулах
+\usepackage[T2A]{fontenc}          % кодировка
+\usepackage[english, russian]{babel}    % локализация и переносы
+\usepackage{color}                  % цветные буковки
+\usepackage[top=20mm, bottom=20mm, left=30mm, right=15mm]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath, amsfonts, amssymb, mathtools} 
+\usepackage{amsthm}
+\usepackage{listings, listingsutf8}
+\usepackage{extarrows}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}[section]
+
+\theoremstyle{leads}
+\newtheorem{leads}{Следствие}
+
+\theoremstyle{example}
+\newtheorem{example}{Пример}
+
+% Бесконечная последовательность 
+\newcommand{\infseq}[3]{%
+	\ensuremath{#1_#2, \dots, #1_#3, \dots}\ }
+
+% Бесконечная последовательность X_1, ... X_n, ...
+\newcommand{\infseqX}{%
+	\infseq{X}{1}{n}}
+
+\begin{document}
+\section{Неравенства Чебышева.}
+	\newtheorem*{cheb}{Первое неравенство Чебышева}
+	\begin{cheb}
+	 Пусть
+	\begin{enumerate}
+		\item X -- случайная величина
+		\item $X\geq 0$(т.е. $P\{X < 0\} = 0$)
+		\item $\exists MX$
+	\end{enumerate}	
+    Тогда $\forall \varepsilon > 0 \quad P\{X \geq \varepsilon \} \leq \frac{MX}{\varepsilon}$
+	\end{cheb}
+    \begin{proof}
+    	Для случая непрерывной случайной величины Х(для случая дискретной случайной величины Х доказательство аналогично)\\
+    	$MX = \int_{-\infty}^{+\infty} xf(x)dx = |X \geq 0| = \int_{0}^{+\infty} xf(x)dx = \int_{0}^{\varepsilon} xf(x)dx + \int_{\varepsilon}^{+\infty} xf(x)dx \geq
+    	\int_{\varepsilon}^{+\infty}xf(x)dx \geq |x \in [\varepsilon, +\infty) \rightarrow x \geq \varepsilon| \geq \varepsilon \int_{\varepsilon}^{+\infty} f(x)dx \geq \varepsilon P\{ x\geq \varepsilon\}$
+    	\begin{displaymath}
+    	\int_{\varepsilon}^{+\infty} f(x)dx = P\{X \geq \varepsilon\}
+    	\end{displaymath}
+    	Таким образом, 
+    	\begin{displaymath}
+    	MX \geq \varepsilon P\{X \geq \varepsilon\} \Longrightarrow P\{X \geq \varepsilon\} \leq \frac{MX}{\varepsilon}
+    	\end{displaymath}
+    \end{proof}
+
+\newtheorem*{cheb2}{Второе неравенство Чебышева}
+\begin{cheb2}
+	 Пусть
+	\begin{enumerate}
+		\item Х -- случайная величина
+		\item $\exists MX, \quad \exists DX$
+	\end{enumerate}
+Тогда $\quad \forall \varepsilon > 0 \quad P\{|X - MX| \geq \varepsilon\} \leq \frac{DX}{\varepsilon^2}$
+\end{cheb2}
+\begin{proof}
+	\begin{enumerate}
+		\item Рассмотрим случайную величину $Y = (X - MX)^2$
+		\item Из первого неравенства Чебышева для  Y следует, что $\forall \delta > 0$ $P \{ Y \geq \delta\} \leq \frac{MY}{\delta}$
+		\item Используем $P \{ Y \geq \delta\} \leq \frac{MY}{\delta}$ для $\delta = \varepsilon^2$
+	\end{enumerate}
+	\begin{displaymath}
+		DX = M[(X - MX)^2] = \delta P\{(X - MX)^2 \geq \delta\} = \varepsilon^2 P\{(X - MX)^2 \geq \varepsilon^2\} = \varepsilon^2 P\{|X - MX| \geq \varepsilon\}
+	\end{displaymath}
+	Таким образом, $DX \geq \varepsilon^2 P\{|X - MX| \geq \varepsilon\} \Longrightarrow P\{|X - MX|\geq \varepsilon\} \leq \frac{DX}{\varepsilon^2}$
+\end{proof}
+
+\section{Сходимость. Закон больших чисел.}
+\newtheorem*{sxod}{Сходимость по вероятности и слабая сходимость для последовательности случайных величин. Закон больших чисел}
+\begin{sxod}
+	Пусть  \infseqX -- последовательность случайных величин.
+	\begin{definition}
+		Говорят, что последовательность случайных величин $\infseqX$ сходится по вероятности к случайной величине Z, если\newline
+		\begin{center}
+			\centering
+			$\forall \varepsilon > 0 \quad P\{|X_n - Z| \geq \varepsilon\} \xlongrightarrow[n \rightarrow \infty]{} 0$\\
+			$X_n \xlongrightarrow [n \rightarrow \infty]{P} Z$
+		\end{center}
+	\end{definition}	
+	\begin{definition}
+		Говорят, что последовательность случайных величин $\infseqX$ слабо сходится к случайной величине Z, если функциональная последовательность $F_{X_1}(x),\newline F_{X_2}(x), \dots$ поточечно сходится к функции $F_{Z}(x)$ во всех точках непрерывности последней, т.е.
+		\begin{center}
+			\centering
+			$(\forall x_0 \in \mathbb{R})(функция F_{Z}(x)$ непрерывна в $x_{0}) \Longrightarrow F_{X_n}(x_0) \xlongrightarrow[n\rightarrow \infty]{} F_z(x_0)$
+		\end{center}
+	\end{definition}
+\end{sxod}
+\newtheorem*{bignumbers}{Закон больших чисел}
+\begin{bignumbers}
+    \begin{definition}
+    	Говорят, что последовательность \infseqX удовлетворяет закону больших чисел, если 
+    	\begin{center}
+    		\centering
+    		$\forall \varepsilon > 0 \quad P\{|\frac{1}{n}\sum_{i = 1}^{n}X_i - \frac{1}{n}\sum_{i=1}^{n}m_i|\geq \varepsilon\} \xlongrightarrow[n\rightarrow \infty]{} 0$
+    	\end{center}
+    где $m_i = MX_i,\quad i \in N$
+    \end{definition}
+\end{bignumbers}
+\newtheorem*{bcheb}{Закон больших чисел в форме Чебышева}
+\begin{bcheb}
+	Пусть 
+	\begin{enumerate}
+		\item $\infseqX$ -- последовательность независимых случайных величин
+		\item $\exists MX_i = m_i \quad \exists DX_i = \sigma_i^2, \quad i \in N$
+		\item Дисперсия случайных величин $\infseqX$ ограничена в совокупности, то есть
+		\begin{center}
+			\centering
+			$\forall c > 0 \quad \sigma_i^2 \leq c, \quad i \in N$
+		\end{center}
+	\end{enumerate}
+Тогда последовательность $\infseqX$ удовлетворяет закону больших чисел.
+\end{bcheb}
+\begin{proof}
+	\begin{enumerate}
+		\item Рассмотрим 
+		\begin{displaymath}
+		\overline{X_n} = \frac{1}{n} \sum_{i = 1}^{n}X_i,\quad n \in N
+		\end{displaymath}
+		Тогда
+		\begin{displaymath}
+			M[\overline{X_n}] = \frac{1}{n} \sum_{i=1}^{n} m_i
+		\end{displaymath}
+		\begin{displaymath}
+			D[\overline{X_n}] = D[\frac{1}{n} \sum_{i=1}^{n} X_i] = \frac{1}{n^2} D[\sum_{i = 1}^{n}X_i] = \frac{1}{n^2}DX_i = \frac{1}{n^2} \sigma_i^2
+		\end{displaymath}
+		\item Применим к случайной величине $\overline{X_n}$ второе неравенство Чебышева
+		\begin{displaymath} 
+			P\{|\overline{X_n} - M\overline{X_n} \geq \varepsilon\} \leq \frac{D\overline{X_n}}{\varepsilon^2}
+		\end{displaymath}
+	\end{enumerate}
+Таким образом, 
+\begin{displaymath}
+P\{|\overline{X_n} - \frac{1}{n}\sum_{i=1}^{n} m_i|\geq \varepsilon\} \leq \frac{1}{\varepsilon^2 n^2}\sum_{i=1}^{n} \sigma_i^2
+\end{displaymath}
+\begin{displaymath}
+	\sum_{i=1}^{n} \sigma_i^2 \leq \sum_{i=1}^{n} c = nc
+\end{displaymath}
+\begin{displaymath}
+	0 \leq P\{|\overline{X_n} - \frac{1}{n} \sum_{i=1}^{n} m_i| \geq \varepsilon\} \leq \frac{c}{\varepsilon^2 n^2} \centerdot n = \frac{c}{\varepsilon^2 n}
+\end{displaymath}
+При $n\rightarrow \infty \quad \frac{c}{\varepsilon^2 n} \rightarrow 0$.
+По теореме о двух милиционерах
+\begin{displaymath}
+	P\{|\overline{X_n} - \frac{1}{n}\sum_{i = 1}^{n}m_i| \geq \varepsilon\} \xlongrightarrow[n\rightarrow \infty]{} 0
+\end{displaymath}
+то есть последовательность $\infseqX$ удовлетворяет закону больших чисел.
+\end{proof}
+\begin{leads}
+	Пусть 
+	\begin{enumerate}
+		\item выполнены условия теоремы Чебышева
+		\item все случайные величины $X_i$ одинаково распределены(обозначим $m_i \equiv m = MX_i$)  
+	\end{enumerate}
+Тогда 
+\begin{displaymath}
+	\forall \varepsilon > 0 \quad P\{|\frac{1}{n}\sum_{i=1}^{n}X_i - m| \geq \varepsilon \} \xlongrightarrow[n \rightarrow \infty]{} 0
+\end{displaymath}
+\end{leads}
+\begin{proof}
+	Так как $m_i \equiv m$, то $\frac{1}{n}\sum_{i=1}^{n} m_i = m$ и используем закон больших чисел в форме Чебышева.
+\end{proof}
+\begin{leads}
+	Закон больших чисел в форме Бернулли.
+	
+	Пусть 
+	\begin{enumerate}
+		\item проводится n испытаний по схеме Бернулли с вероятностью успеха p
+		\item $r_n = \frac{\text{количество наступлений успеха}}{n}$ -- относительная(наблюденная) частота успеха
+	\end{enumerate}
+Тогда 
+\begin{displaymath}
+  r_n \xlongrightarrow[n \rightarrow \infty]{P} p
+\end{displaymath}
+\end{leads}
+\begin{proof}
+	\begin{enumerate}
+	    \item Введем случайные величины $X_i, \quad i = \overline{1,m}$, 
+	    \begin{displaymath}
+	    	X_i = \begin{cases}
+	    	1, & \text{если в i-м испытании произошёл успех}\\
+	    	0, & \text{иначе}
+	    	\end{cases}
+	    \end{displaymath}
+	    Тогда 
+	    \begin{itemize}
+	    \item Закон распределения $X_i$
+	    \begin{center}
+	    	\centering
+	        \begin{tabular}{|l|l|l|}
+	    		\hline
+	    		$X_i$ & 0 & 1\\ \hline
+	    		p & q & p \\
+	    		\hline
+	    	\end{tabular}
+	    \end{center}
+    Таким образом, все $X_i$ одинаково распределены, $MX_i = p,\quad DX_i = pq$
+    \item $DX_i \equiv pq \Longrightarrow$ ограничены в совокупности
+    \item $X_i$ независимы, так как отдельные испытания в схеме испытаний Бернулли независимы
+    \end{itemize}
+	    \item Таким образом, последовательность $\infseqX$ удовлетворяет следствию 1 из теоремы Чебышева и для нее справедливо
+	    \begin{center}
+	    	\centering
+	    	$\forall \varepsilon > 0 \quad P\{|\frac{1}{n}\sum_{i=1}^{n}X_i - m|\geq \varepsilon\} \xlongrightarrow[n \rightarrow \infty]{} 0$
+	    \end{center}
+    \begin{center}
+    	\centering
+    	$\forall \varepsilon > 0 \quad P\{|r_n - p| \geq \varepsilon\} \xlongrightarrow[n \rightarrow \infty]{} 0$, то есть $r_n \xlongrightarrow[n \rightarrow \infty] {P} p$
+    \end{center}
+	\end{enumerate}
+\end{proof}
+\section{Центральная предельная теорема}
+Пусть выполнены следующие 3 условия: 
+\begin{enumerate}
+	\item $\infseqX$ -- последовательность независимых случайных величин
+	\item все случайные величины $X_i,\quad  i \in N$ одинаково распределены
+	\item $\exists MX_i = m,\quad \exists DX_i = \sigma^2, \quad i \in N$
+\end{enumerate}
+Рассмотрим случайную величину 
+\begin{displaymath}
+	\overline{X_n} = \frac{1}{n}\sum_{i=1}^{n}X_i,\quad M\overline{X_n} = m, \quad D\overline{X_n} = \frac{\sigma^2}{n},\quad n \in N
+\end{displaymath}
+
+Рассмотрим случайную величину 
+\begin{displaymath}
+	Y_n = \frac{\overline{X_n} - M\overline{X_n}}{\sqrt{D\overline{X_n}}} = \frac{\overline{X_n} - m}{\frac{\sigma}{\sqrt{n}}}
+\end{displaymath}
+\newtheorem*{cpt}{Центральная предельная теорема}
+\begin{cpt}
+	Пусть выполнены условия 1-3. Тогда последовательность случайных величин $Y_n$ при $n \rightarrow \infty$ слабо сходится к случайной величине Z, имеющей стандартное нормальное распределение, то есть 
+	\begin{displaymath}
+		\forall x \in \mathbb{R} \quad F_{Y_n} \xlongrightarrow[n \rightarrow \infty]{} F_Z(x),  
+	\end{displaymath} 
+где 
+\begin{displaymath}
+	Z \sim N(0,1), \quad F_Z(x) = \Phi(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{x} e^{-\frac{t^2}{2}} dt.
+\end{displaymath}
+\end{cpt}
+
+\newtheorem*{mlap}{Интегральная теорема Муавра-Лапласа}
+\begin{mlap}
+	Пусть 
+	\begin{enumerate}
+	  \item проводится большое число испытаний по схеме Бернулли с вероятностью успеха p
+	  \item k -- число успехов в этой серии 
+	\end{enumerate}
+Тогда 
+\begin{displaymath}
+	P\{k_1 \leq k \leq k_2\} \approx \Phi(x_2) - \Phi(x_1), \quad  x_i = \frac{k_i - np}{\sqrt{npq}}, \quad i = \overline{1,2}, \quad q = 1 - p, \quad 
+	\Phi(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{\frac{-t^2}{2}}
+\end{displaymath}
+\end{mlap}
+\begin{proof}
+	\begin{enumerate}
+		\item Пусть $X_i$ -- случайная величина, принимающая значения 0 или 1 в соответствии с правилом
+	    \begin{displaymath}
+		X_i = \begin{cases}
+		1, & \text{если в i-м испытании произошёл успех}\\
+		0, & \text{иначе}
+		\end{cases}
+		\end{displaymath}
+	Тогда 
+	\begin{itemize}
+		\item Случайные величины $\infseqX$ независимы
+		\item $MX_i = p$, $DX_i = pq$, $i \in N$
+		\item $X_i$ одинаково распределены
+	\end{itemize}
+ \item
+ 	 	$P\{k_1 \leq k \leq k_2\} = P\{k_1 \leq \sum_{i=1}^{n}X_i \leq k_2\} = P\{\frac{k_1}{n} - p \leq \frac{1}{n}\sum_{i=1}^{n} X_i - p \leq \frac{k_2}{n} - p\} =	\\
+ 	P\{\frac{k_1/n - p}{\sqrt{\frac{pq}{n}}} \leq \frac{\overline{X_n} - p}{\sqrt{\frac{pq}{n}}} \leq \frac{k_2/n - p}{\sqrt{\frac{pq}{n}}}\} \approx \Phi(x_2) - \Phi(x_1)$
+	\end{enumerate}
+\end{proof}
+
+\section{Математическая статистика}
+\begin{definition}
+	Множество возможных значений случайной величины X называют генеральной совокупностью.
+\end{definition}
+\begin{definition}
+	Случайной выборкой из генеральной совокупности Х называют случайный вектор $\vec{X} = (X_1, \dots, X_n)$,  где $X_1, \dots, X_n$ -- независимые в совокупности случайные величины, каждая из которых имеет то же распределение, что и X. При этом n называется объёмом случайной выборки.
+\end{definition}
+\begin{definition}
+	Любую возможную реализацию $\vec{x} = (x_1,\dots, x_n)$ случайной выборки $\vec{X}$ называют выборкой из генеральной совокупности X. При этом число $x_k$ называется k-м элементом выборки $\vec{x}$.
+\end{definition}
+\begin{definition}
+	Вариационным рядом, построенным по выборке $\vec{x}$, называется кортеж $(x_{(1)}, \dots, x_{(n)})$, где $x_{(1)}, \dots, x_{(n)}$ -- элементы выборки $\vec{x}$, расположенные в порядке неубывания.
+\end{definition}
+\begin{definition}
+	Пусть $F(x)$ -- функция распределения случайной величины X. Тогда функция распределения случайной выборки $\vec{X}$ объема n из совокупности X:
+	\begin{displaymath}
+	F_{\vec{X}}(t_1, \dots, t_n) = F(t_1) \centerdot \dots \centerdot F(t_n)
+	\end{displaymath}
+	\begin{displaymath}
+		P\{X_1 < t_1, \dots, X_n < t_n\} = P\{X_1 < t_1\} \centerdot\dots \centerdot P\{X_n < t_n\} = F(t_1) \centerdot\dots \centerdot F(t_n)
+	\end{displaymath}
+	$	F_{x_{(n)}}(x) = P\{x_{(n)} < x\} = P\{X_1 < x, \dots, X_n < x\} = P\{X_1 < x\} \centerdot\dots \centerdot P\{X_n < x\} = F(x) \centerdot\dots \centerdot F(x) = [F(x)]^n$
+	
+	$F_{x_{(1)}}(x) = P\{x_{(1)} < x\} = 1 - P\{X_1 \geq x \} = 1 - P\{X_1 \geq x, \dots, X_n \geq x\} = 1 - (1 - P\{X_1 < x\}) \centerdot\dots \centerdot(1 - P\{X_n < x\}) = 1 - (1 - F(x))^n$
+\end{definition}
+\begin{definition}
+	Любую функцию $g(\vec{X})$ случайной выборки $\vec{X}$ называют статистикой.
+\end{definition}
+\begin{definition}
+	Выборочным начальным моментом порядка k называют статистику:
+	\begin{displaymath}
+		\hat{m_k}(\vec{X}) = \frac{1}{n} \sum_{i=1}^{n} X_{i}^{k}
+	\end{displaymath}
+\end{definition}
+\begin{definition}
+	Центральным выборочным моментом порядка k называют статистику
+	\begin{displaymath}
+		\hat{\nu_k}(\vec{X}) = \frac{1}{n} \sum_{i=1}^{n} (X_i - \overline{X})^k
+	\end{displaymath}
+\end{definition}
+\begin{definition}
+	Выборочным средним (выборочным математическим ожиданием) называют статистику
+	\begin{displaymath}
+		\hat{m}(\vec{X}) = \overline{X_n} = \frac{1}{n}\sum_{i=1}^{n} X_i
+	\end{displaymath}
+\end{definition}
+\begin{definition}
+	Выборочной дисперсией называют статистику 
+	\begin{displaymath}
+		\hat{\sigma^2}(\vec{X}) = \frac{1}{n} \sum_{i=1}^{n} (X_i - \overline{X})^2
+	\end{displaymath}
+\end{definition}
+\newtheorem*{remark}{Замечание}
+\begin{remark}
+	Выборочное среднее является несмещённой оценкой своего теоретического аналога, а выборочная дисперсия -- нет.
+	\begin{proof}
+		$\hat{m}(\vec{X}) = \overline{X} = \frac{1}{n} \sum_{i=1}^{n} X_i$\\
+		$M[\hat{m}(\vec{X})] = M[\frac{1}{n} \sum_{i=1}^{n} X_i] = \frac{1}{n} M[\sum_{i=1}^{n}X_i] = \frac{1}{n} \sum_{i=1}^{n}MX_i = $|$X_i \sim X$| $ = \frac{1}{n} \sum_{i=1}^{n}m_i = m$
+	\end{proof}
+\end{remark}
+
+\begin{definition}
+	Эмпирической функцией распределения, отвечающей выборке $\vec{x}$ называют функцию
+	\begin{displaymath}
+	F_n\colon \mathbb{R} \to \mathbb{R}, \quad F_n(x) = \frac{n(x, \vec{x})}{n}, 
+	\end{displaymath}
+	где 
+	\begin{itemize}
+		\item $\vec{X}_n = (X_1, \ldots, X_n)$ --- случайная выборка;
+		\item $\vec{x} = (x_1, \dots, x_n)$ --- реализация случайной выборки $\vec{X}_n$;
+		\item $n(x, \vec{x})$ --- количество элементов выборки $\vec{x}$, которые меньше $x$.
+	\end{itemize}
+\end{definition}
+\begin{definition}
+	Выборочной функцией распределения, отвечающей случайной выборке $\vec{X}$, называется функция:
+	\begin{displaymath}
+		\hat{F_n}(x) = \frac{n(x, \vec{X})}{n},  
+	\end{displaymath}
+	где $n(x, \vec{X})$ -- случайная величина, которая для каждой реализации $\vec{x}$ случайной выборки $\vec{X}$ принимает значение, равное $n(x, \vec{x})$. 
+\end{definition}
+
+\newtheorem*{sxod2}{Теорема о сходимости выборочной функции распределения.}
+\begin{sxod2}
+	Для любого фиксированного $x \in \mathbb{R} \quad \hat{F_n}(x)$ сходится по вероятности к значению $F(x)$ теоретической функции распределения случайной величины $X$:
+	\begin{center}
+		\centering
+		$\forall x \in \mathbb{R}$ $\quad$ $\hat{F_n}(x) \xlongrightarrow[n \rightarrow \infty]{P} F(x)$
+	\end{center}
+\end{sxod2}
+\begin{proof}
+	$\hat{F_n}(x)$ -- относительная частота успеха в серии из n испытаний по схеме Бернулли с вероятностью успеха p.\\
+	В соответствии с законом больших чисел в форме Бернулли  
+	\begin{center}
+		\centering
+		$\hat{F_n}(x) \xlongrightarrow[n \rightarrow \infty]{P} p$, но $p = P\{X < x\} = F(x)$
+	\end{center}
+\end{proof}
+
+\begin{definition}
+	Интервальным статистическим рядом называют таблицу:
+	\begin{center}
+	\centering
+	    \begin{tabular}{|l|l|l|}
+		\hline
+		$J_1$ & $\dots$ & $J_m$\\ \hline
+		$n_1$ & $\dots$ & $n_m$\\ \hline 
+	    \end{tabular}
+    \end{center}
+Здесь $n_i$ -- количество элементов выборки $\vec{x}$, принадлежащих $J_i$.
+\end{definition}
+
+\begin{definition}
+	Эмпирической плотностью распределения случайной выборки $\vec{X}_n$ называют функцию
+	\begin{displaymath}
+	f_n(x) =
+	\begin{cases}
+	\frac{n_i}{n \, \Delta}, &x \in J_i,\; i = \overline{1, m};\\
+	0, &\text{иначе}.
+	\end{cases}, \quad \text{где}
+	\end{displaymath}
+	\begin{itemize}
+		\item $J_i,\, i = \overline{1; m}$, --- полуинтервал из $J = [x_{(1)}, x_{(n)}]$, где 
+		\begin{align}
+		&x_{(1)} = \min\{ x_1, \dots, x_n \}, &x_{(n)} = \max\{ x_1, \dots, x_n \};
+		\end{align}
+		при этом все полуинтервалы, кроме последнего, не содержат правую границу т.\,е.
+		\begin{align}
+		&J_i = [ x_{(1)} + (i-1)\Delta, x_{(1)} + i\Delta), \quad i = \overline{1, m-1};
+		\\
+		&J_m = [ x_{(1)} + (m-1)\Delta, x_{(1)} + m\Delta];
+		\end{align}
+		\item $m$ --- количество полуинтервалов интервала $J = [x_{(1)}, x_{(n)}]$;
+		\item $\Delta$ --- длина полуинтервала $J_i$, $i = \overline{1, m}$ равная
+		\begin{displaymath}
+		\Delta = \frac{x_{(n)} - x_{(1)}}{m} = \frac{|J|}{m};
+		\end{displaymath}
+		\item $n_i$ --- количество элементов выборки в полуинтервале $J_i$, $i = \overline{1, m}$;
+		\item $n$ --- количество элементов в выборке.
+		
+	\end{itemize}
+\end{definition}
+\begin{definition}
+	График функции $f_n(x)$ называют гистограммой.
+\end{definition}
+\begin{definition}
+	Полигоном частот для выборки $\vec{x}$ называется ломанная, звенья которой соединяют середины верхних сторон прямоугольников гистограммы.
+\end{definition}
+
+\section{Точечные оценки.}
+Пусть $X$ -- случайная величина, общий закон распределения которой известен, но неизвестны значения одного или нескольких параметров этого закона.
+Пусть $\theta$ -- неизвестный параметр закона распределения случайной величины X.
+\begin{definition}
+	Точечной оценкой параметра $\theta$ называется статистика $\hat{\theta}(\vec{X})$, выборочное значение которой принимается в качестве значения параметра $\theta$: $\theta := \hat{\theta}(\vec{X})$.
+\end{definition}
+
+Качество используемой точечной оценки $\hat{\theta}(\vec{X})$ параметра $\theta$ характеризуют следующие свойства:
+\begin{enumerate}
+	\item несмещаемость
+	\item состоятельность 
+	\item эффективность
+\end{enumerate}
+
+\begin{definition}
+	Оценка $\hat{\theta}(\vec{x})$ параметра $\theta$ называется несмещенной, если 
+	\begin{center}
+		\centering $\exists M[\hat{\theta}(\vec{X})] = \theta$
+	\end{center}
+\end{definition}
+
+Доказать, что выборочная дисперсия является смещённой оценкой дисперсии.
+\begin{proof}
+	\begin{itemize}
+		\item $X$ -- случайная величина
+		\item $\sigma^2 = DX$
+		\item $\hat{\sigma^2}(\vec{X}) = \frac{1}{n} \sum_{i=1}^{n} (X_i - \overline{X})^2$
+	\end{itemize}
+$M[\hat{\sigma^2}(\vec{X})] = M[\frac{1}{n}  \sum_{i=1}^{n} (X_i - \overline{X})^2] = \frac{1}{n} M[ \sum_{i=1}^{n} (X_i - \overline{X})^2] = \frac{1}{n} \sum_{i=1}^{n} M[(X_i - \overline{X})^2] = \frac{1}{n}  \sum_{i=1}^{n} M[(X_i - \sum_{i=1}^{n}X_j)^2] = \sum_{i=1}^{n} M[((X_i - m) - \frac{1}{n} \sum_{j=1}^{n}(X_j - m))^2] = \frac{1}{n} \sum_{i=1}^{n} M [(X_i - m)^2 - \frac{2}{n} \sum_{i=1}^{n}(X_j - m)(X_i - m) + \frac{1}{n^2} (\sum_{j=1}^{n}(X_j - m) )^2] = \frac{1}{n} \sum_{i=1}^{n}\{M [(X_i - m)^2] - \frac{2}{n} \sum_{j=1}^{n} M[(X_i - m)(X_j - m)] + \frac{1}{n^2} \sum_{j=1}^{n} M [(X_j - m)^2 + \frac{1}{n^2} \sum_{j,k=1, k \neq j}^{n}M[(X_k - m)(X_j - m)]] = \frac{1}{n} \sum_{i=1}^{n}\{ \sigma^2 - \frac{2}{n} \sigma^2 + \frac{1}{n^2} \sum_{j=1}^{n} \sigma^2\} = \frac{1}{n} \centerdot n \{ \sigma^2 - \frac{2}{n} \sigma^2 + \frac{1}{n} \sigma^2\} = \sigma^2 - \frac{1}{n} \sigma^2 = \sigma^2 (1 - \frac{1}{n}) = \sigma^2 \frac{n - 1}{n} \neq \sigma^2$
+\end{proof}
+\begin{definition}
+	Статистику $S^2(\vec{X})$ называется исправленной выборочной дисперсией и равна\\
+		$S^2(\vec{X}) = \frac{n}{n - 1} \hat{\sigma^2}(\vec{X}) = M[S^2] = M[\frac{n}{n - 1} \sigma^2] = \frac{1}{n} \sum_{i=1}^{n} (X_i - \overline{X})^2 = \frac{n}{n - 1} M[\hat{\sigma^2}] = \frac{n}{n - 1} \centerdot\frac{n - 1}{n} \centerdot\sigma^2 = \sigma^2$, \\
+		то есть $S^2(\vec{X})$ является несмещённой оценкой дисперсии.
+\end{definition}
+\begin{definition}
+	Оценка $\hat{\theta}$ называется состоятельной оценкой, если 
+	\begin{displaymath}
+		\hat \theta (\vec{X}) \xlongrightarrow[n \rightarrow \infty]{P} \theta, 
+	\end{displaymath} 
+	где n -- объем выборки.
+\end{definition}
+\begin{remark}
+	Условие из определения можно записать в виде: 
+	\begin{displaymath}
+		\forall \varepsilon > 0 \quad \lim_{n \rightarrow \infty} P\{|\hat{\theta}(\vec{X}) - \theta| < \varepsilon\} = 1
+	\end{displaymath}
+\end{remark}
+\begin{example}
+Пусть $X$ -- случайная величина, $\exists MX = m$.
+	\begin{itemize}
+		\item последовательность $\infseqX$ независима и одинаково распределена
+		\item $\exists MX_i = m, \quad \exists DX_i = \sigma^2$
+		\item из предыдущих пунктов следует, что $\infseqX$ удовлетворяет закону больших чисел в форме Чебышева
+		\begin{center}
+			\centering
+			$\forall \varepsilon > 0 \quad P\{| \overline{X} - m | < \varepsilon \} \xlongrightarrow[n \rightarrow \infty]{} 1$\\
+			$ \overline{X} \xlongrightarrow[n \rightarrow \infty]{P} m$
+		\end{center}
+	\end{itemize}
+\end{example}
+
+\begin{example}
+	Пусть
+	\begin{enumerate}
+		\item $X \sim N(m, \sigma^2)$, m и $\sigma^2$ неизвестны
+		\item $\hat{m}(\vec{X}) = X_1$ -- результат наблюдения -- точечная оценка для m
+	\end{enumerate}
+Покажем, что $\hat{m}$ -- несостоятельная оценка.\\
+Зафиксируем $\varepsilon > 0$ \\
+$P\{|\hat{m}(\vec{X}) - m| < \varepsilon\} = P\{|X_1 - m| < \varepsilon\} = $|$X_1 \sim X \sim N(m, \sigma^2)$|$ = P\{m - \varepsilon < X_1 < m + \varepsilon\} = \Phi_0(\frac{m + \varepsilon - m}{\sigma}) - \Phi_0(\frac{m - \varepsilon - m}{\sigma}) = 2\Phi_0(\frac{\varepsilon}{\sigma}) \neq 1, $ если $\frac{\varepsilon}{\sigma} \neq +\infty$.\\
+Тогда $P\{|\hat{m}(\vec{X}) - m| < \varepsilon\} \xlongrightarrow[n \rightarrow \infty]{} 1$.
+\end{example}
+
+\begin{definition}
+	Оценка $\hat{\theta}$ называется эффективной оценкой для параметра $\theta$, если: 
+	\begin{enumerate}
+		\item $\hat{\theta}$ -- несмещенная оценка для $\theta$
+		\item $\hat{\theta}$ обладает наименьшей дисперсией среди всех несмещенных оценок $\theta$
+	\end{enumerate}
+\end{definition}
+\begin{remark}
+	Иногда говорят об эффективной оценке в классе оценок $\Theta$.\\
+	Если $\Theta$ -- некоторое множество несмещенных оценок для $\theta$, то оценка $\hat \theta \in \Theta$ называется эффективной оценкой для $\theta$ в классе $\Theta$, если $\hat{\theta}$ обладает наименьшей дисперсией среди всех оценок класса $\Theta$.
+	\begin{center}
+		$\forall \tilde{\theta} \in \Theta \quad D \hat{\theta} \leq D \tilde{\theta}$
+	\end{center}
+\end{remark}
+\newtheorem*{linear}{Доказать, что выборочное среднее является эффективной оценкой для m в классе линейных оценок}
+\begin{linear}
+Пусть $X$ -- случайная величина, $\exists MX = m, \quad \exists DX = \sigma^2$, так что выборочное среднее $\overline{X}$ является эффективной оценкой для m в классе линейных оценок.
+\end{linear}
+\begin{proof}
+	\begin{enumerate}
+		\item Линейная оценка имеет вид:
+		 \begin{equation*}
+		 	\hat{m}(\vec{X}) = \lambda_1 x_1 + \dots + \lambda_n x_n, \quad \lambda_j \in \mathbb{R}
+		 \end{equation*}
+		\item Так как оценка должна быть несмещенной
+		\begin{equation*}
+		M[\hat{m}(\vec{X})] = M[\sum_{i=1}^{n} \lambda_i x_i] = \sum_{i=1}^{n} \lambda_i MX_i = \sum_{i=1}^{m}\lambda_i m = m \sum_{i=1}^{n} \lambda_i
+		\end{equation*}
+	\end{enumerate}
+Требуется $M[\hat{m}(\vec{X})] = m \Longrightarrow \sum_{i=1}^{n} \lambda_i = 1$.
+Подберем в линейной оценке $\hat{m}(\vec{X}) = \sum_{i=1}^{n}\lambda_i x_i$ параметр $\lambda_i$ так, чтобы $D[\hat{m}(\vec{X})]$ было минимальным среди значений дисперсии всевозможных линейных оценок.
+\begin{equation*}
+	D[\hat{m}] = D[\sum_{i=1}^{n}\lambda_i X_i] = |X_i независимы| = \sum_{i=1}^{n} \lambda_i^2 DX_i = \sigma_i^2 \sum_{i=1}^{n} \lambda_i^2
+\end{equation*}
+ Поиск условий экстремума.\newline
+ 
+$\left \{
+\begin{array}{ccc}
+f(\lambda_1 \dots, \lambda_n) \centerdot \sum_{i=1}^{n} \lambda_i \longrightarrow min\\
+\vdots\\
+\sum_{i=1}^{n} \lambda_i = 1\\
+\end{array}
+\right.$\newline
+
+Составим функцию Лагранжа
+\begin{equation*}
+	L(\lambda_1, \dots, \lambda_n, \mu) = f(\lambda_1, \dots, \lambda_n) \centerdot \mu(\sum_{i=1}^{n} \lambda_i - 1)
+\end{equation*}
+
+Необходимое условие экстремума
+
+$\left \{
+\begin{array}{ccc}
+\frac{\partial L}{\partial \lambda_1} = 2 \lambda_1 - \mu  = 0\\
+\vdots\\
+\frac{\partial L}{\partial \lambda_n} = 2 \lambda_n - \mu  = 0\\
+\frac{\partial L}{\partial \mu} = - (\sum_{i=1}^{n} \lambda_i - 1) = 0 \\
+\end{array}
+\right.$\newline
+
+$\lambda_i = \frac{\mu}{2}, \quad i = \overline{1, n}$.
+
+$\sum_{i=1}^{n} \frac{\mu}{2} = 1,\quad \frac{\mu n }{2} = 1 \Longrightarrow  \mu = \frac{2}{n} \Longrightarrow \quad \lambda_i = \frac{1}{n}$.\newline
+
+Можно проверить достаточное условие экстремума так, что 
+$(\frac{1}{n}, \dots, \frac{1}{n})$ является условным минимумом $f(\lambda_1, \dots, \lambda_n)$ таким образом, линейная оценка с наименьшей дисперсией 
+\begin{equation*}
+	\hat{m}(\vec{X}) = \sum_{i=1}^{n}\frac{1}{n} X_i = \frac{1}{n} \sum_{i=1}^{n}X_i = \overline{X}
+\end{equation*}
+
+Соответствующее значение дисперсии
+\begin{equation*}
+	D[\hat{m}(\vec{X})]|_{(\lambda_1, \dots, \lambda_n) = (\frac{1}{n}, \dots, \frac{1}{n})} = \sigma^2(\sum_{i=1}^{n}\lambda_i^2)|_{(\lambda_i = \frac{1}{n})} = \frac{\sigma^2}{n^2}
+\end{equation*}
+\end{proof}
+
+\newtheorem*{only}{Единственность эффективной оценки}
+\begin{only}
+	Пусть $\hat{\theta_1}(\vec{X})$ и $\hat{\theta_2}(\vec{X})$ -- две эффективные оценки $\theta$. Тогда 
+	\begin{center}
+		\centering
+		$\hat{\theta_1}(\vec{X}) = \hat{\theta_2}(\vec{X})$
+	\end{center}
+\end{only}
+\begin{proof}
+Рассмотрим оценку 
+\begin{displaymath}
+	\hat{\theta} = \frac{1}{2}[\hat{\theta_1} + \hat{\theta_2}]
+\end{displaymath}
+$M \hat{\theta} = M[\frac{1}{2} (\hat{\theta_1} + \hat{\theta_2})] = \frac{1}{2} [M \hat{\theta_1} + M \hat{\theta_2}] =$ |$\hat{\theta_1}$ и $\hat{\theta_2}$ эффективные, а следовательно несмещенные|$ = \frac{1}{2}[\theta + \theta] = \theta$, то есть $\hat{\theta}$ так же является несмещенной оценкой для $\theta$.\\
+
+$D \hat{\theta} = \frac{1}{4} D[\hat{\theta_1} + \hat{\theta_2}] = \frac{1}{4} [D \hat{\theta_1} + D \hat{\theta_2} + 2cov(\hat{\theta_1}, \hat{\theta_2})] = $ |обозначим $D\hat{\theta_1} = a^2 = D \hat{\theta_2}$| $= \frac{1}{2} [a^2 + cov(\hat{\theta_1}, \hat{\theta_2})] $ (*)\\
+
+$|cov (\hat{\theta_1}, \hat{\theta_2})| \leq \sqrt{D \hat{\theta_1} D \hat{\theta_2}} = a^2$\\
+
+Таким образом, $D \hat{\theta} \leq$ |см.(*)|$ \leq \frac{1}{2} [a^2 + a^2] = a^2$.(**)\\
+
+$\hat{\theta}$ -- несмещенная оценка для $\theta$, а $\hat{\theta_1}, \hat{\theta_2}$ эффективные оценки $\Longrightarrow D \hat{\theta_1} = D\hat{\theta_2} \leq D\hat{\theta}$. С учетом (**) $D \hat{\theta} = a^2$.\\
+
+Из  (*)  вытекает, что 
+$a^2 = \frac{1}{2} [a^2 + cov(\hat{\theta_1}, \hat{\theta_2})] \Longrightarrow cov(\hat{\theta_1}, \hat{\theta_2}) = a^2 $, т.е. $cov(\hat{\theta_1}, \hat{\theta_2}) = \sqrt{D \hat{\theta_1} D\hat{\theta_2}} \Longrightarrow$ |по свойству ковариации| $\Longrightarrow \hat{\theta_1}$ и  $\hat{\theta_2}$ связаны положительной линейной зависимостью, то есть $\hat{\theta_1} = k \hat{\theta_2} + b(k > 0)$(***)\\
+Из (***) следует, что $D \hat{\theta_1} = k^2 D \hat{\theta_2} \Longrightarrow k^2 = 1 \Longrightarrow k = 1$. Тогда $\hat{\theta_1} = \hat{\theta_2} + b \Longrightarrow M \hat{\theta_1} = M \hat{\theta_2} + b \Longrightarrow b = 0$.\\
+Таким образом, $ \hat{\theta_1} = \hat{\theta_2}$.
+\end{proof}
+Пусть 
+\begin{itemize}
+	\item $X$ -- непрерывная случайная величина
+	\item $f(t, \theta)$ -- функция плотности распределения вероятностей случайной величины $X$
+	\item $\vec{X} = (X_1, \dots, X_n)$ -- случайная выборка из генеральной совокупности $X$
+\end{itemize}
+Тогда функция плотности распределения случайного вектора $\vec{X}$:
+\begin{displaymath}
+	f_{\vec{X}}(t_1, \dots, t_n, \theta) = f(t_1, \theta) \centerdot\dots \centerdot f(t_n, \theta)
+\end{displaymath}
+Обозначим $(t_1, \dots, t_n) = \vec{T}$.
+
+\begin{definition}
+	Величина $I(\theta) = M\{[\frac{\partial ln f(\vec{T}, \theta)}{\partial \theta}]^2\}$ называется количеством информации по Фишеру(в серии из n наблюдений).
+\end{definition}
+\begin{remark}
+	Ниже иногда будет нужно дифференцировать по параметру под знаком интеграла:
+	\begin{displaymath}
+	  \frac{\partial}{\partial \theta} \int_{G}{} \phi(\vec{T}, \theta) d\vec{T} = \int_{G}{} \frac{\partial \phi(\vec{T}, \theta)}{\partial \theta} d \vec{T}
+	\end{displaymath}
+	Параметрические модели, для которых справедлив такой переход, будем называть регулярными.
+\end{remark}
+
+\newtheorem*{Rao-Kramer}{Неравенство Рао-Крамера}
+\begin{Rao-Kramer}
+Пусть 
+\begin{enumerate}
+	\item рассматривается регулярная модель
+	\item $\hat \theta (\vec{X})$ -- несмещенная точечная оценка параметра $\theta$ закона распределения случайной величины $X$ 
+\end{enumerate}
+Тогда 
+\begin{displaymath}
+	D \hat{\theta} (\vec{X}) \geq \frac{1}{I(\theta)},
+\end{displaymath}
+где $I(\theta)$ -- количество информации по Фишеру.
+\end{Rao-Kramer}
+
+\begin{proof}
+	\begin{enumerate}
+		\item Обозначим: $G = \{t \in \mathbb{R} : f(t, \theta) > 0\}$\\
+		Тогда 
+		\begin{center}
+			\centering
+			$\int_{\mathbb{R}^n}^{} f_{\vec{X}}(\vec{T}, \theta) d\vec{T} = \int_{G^n}{} f_{\vec{X}} (\vec{T}, \theta) d \vec{T} = 1$
+		\end{center}
+	\item Продифференцируем подчеркнутое равенство по $\theta$:\\
+	Правая часть: $\quad \frac{\partial1}{\partial \theta} = 0$\\
+	Линейная часть: $\quad \frac{\partial}{\partial \theta} \int_{G}{} f_{\vec{X}} (\vec{T}, \theta) d \vec{T} = $ |модель является регулярной| $ = \int_{G}{} \frac{\partial f_{\vec{X}}(\vec{T}, \theta)}{\partial \theta} d \vec{T} = $ |$\frac{\partial ln y}{\partial \theta} = \frac{1}{y} \frac{\partial y}{\partial \theta} \Longrightarrow \frac{\partial y}{\partial \theta} = y \frac{\partial ln y}{\partial \theta}$| = $\int_{G}{}\frac{\partial ln f_{ \vec{X}}(\vec{T}. \theta)}{\partial \theta} = f_{\vec{X}}(\vec{T}. \theta) d \vec{T} = M [\frac{\partial ln f_{\vec{X}}(\vec{T}, \theta)}{\partial \theta}] = 0$(*)
+	\item Так как $ \hat{\theta}(\vec{X})$ - несмещенная оценка для $\theta$, то $\theta = M [ \hat{\theta}(\vec{X})] = \int_{G}{} \hat{\theta}(\vec{T}) f_{\vec{X}}( \vec{T}, \theta) d \vec{T}$\\
+	Продифференцируем полученное равенство по $\theta$:
+	Левая часть: $\frac{\partial \theta}{\partial \theta} = 1$\\
+	Правая часть: $\frac{\partial}{\partial \theta} \int_{G}^{} \hat{\theta}( \vec{T}) f(\vec{T}, \theta) d\vec{T} = $|модель является регулярной|$ \int_{G^n}{} \hat{\theta} (\vec{T}) \frac{\partial f_{\vec{X}}(\vec{T}, \theta)}{\partial \theta} d \vec{T} = $|$\frac{\partial y}{\partial \theta} = y \frac{\partial ln y}{\partial \theta}$|$ = \int_{G}{} \hat{\theta} (\vec{T}) \frac{\partial ln f_{\vec{X}}(\vec{T}, \theta)}{\partial \theta} f_{\vec{X}}(\vec{T}, \theta) d \vec{T} = M [\hat{\theta}(\vec{X}) \centerdot\frac{\partial ln f_{\vec{X}}(\vec{X}, \theta)}{\partial \theta}]$.\\
+	Таким образом, 
+	\begin{displaymath}
+	M[\hat{\theta}(\vec{X}) \frac{\partial ln f_{\vec{X}}(\vec{X}, \theta)}{\partial \theta}] = 1 \quad (**)
+	\end{displaymath}
+	\item Умножим обе части (*) на $\theta$:
+	\begin{displaymath}
+		M [\frac{\partial ln f_{\vec{X}}(\vec{X}, \theta)}{\partial \theta}] = 0 \quad (***)
+	\end{displaymath}
+	Вычтем из (**) равенство (***):
+	\begin{displaymath}
+		M [\frac{\partial ln f_{\vec{X}}(\vec{X}, \theta)}{\partial \theta}(\hat{\theta}(\vec{X}) - \theta)] = 1
+	\end{displaymath}
+	Возведем обе части равенства в квадрат: \\
+	$
+		1 = \{M [\frac{\partial ln f_{\vec{X}}(\vec{X}), \theta}{\partial \theta}(\hat{\theta}(\vec{X}) - \theta) ] \}^2 = \{ \int_{G^n}{} \frac{\partial ln f_{\vec{X}}(\vec{T}, \theta)}{\partial \theta} (\hat{\theta}(\vec{T}) - \theta) f_{X}(\vec{T}, \theta) dT\}^2 = \{(a(\vec{T}), b(\vec{T}))\}^2 \leq (a(\vec{T}), a(\vec{T})) \centerdot(b(\vec{T}), b(\vec{T})) = \int_{G^n}{} [\frac{\partial ln f_{\vec{X}}(\vec{T}, \theta)}{\partial \theta}]^2 f_{\vec{X}}(\vec{T}, \theta) d\vec{T} \centerdot\int_{G^n}{}(\hat{\theta} - \theta)^2 f_{X}(\vec{T}, \theta) d\vec{T} = M[(\frac{\partial ln f_{\vec{X}}(\vec{X}, \theta)}{\partial \theta})^2 ] \centerdot M[ (\hat{\theta}(\vec{X}) - \theta)^2] = I(\theta) \centerdot D[\hat{\theta}]$ \\
+	Таким образом, 
+	\begin{center}
+		\centering
+		$1 \leq I(\theta) D(\hat{\theta}) \Longrightarrow D(\hat{\theta}) \geq \frac{1}{I(\theta)}$
+	\end{center}
+	\end{enumerate}
+\end{proof}
+
+\newtheorem*{Rao2}{Показать, что выборочное среднее является эффективной оценкой нормальной случайной величины при известной дисперсии}
+\begin{Rao2}
+	Пусть $X \sim N(\theta, \sigma^2)$, где $\theta$ неизвестно, $\sigma^2$ -- известно.
+Показать, что $\hat{\theta}(\vec{X}) = \overline{X}$  является эффективной оценкой по Рао-Крамеру.
+\end{Rao2}
+\begin{proof}
+	\begin{displaymath}
+		D\hat{\theta}(\vec{X}) = \frac{1}{I(\theta)}
+	\end{displaymath}
+	\begin{displaymath}
+	D\hat{\theta} = D\overline{X} = D[\frac{1}{n} \sum_{i=1}^{n} X_i] = \frac{1}{n^2} \sum_{i=1}^{n}DX_i =  |X_i \sim X| = \frac{1}{n^2}\sum_{i=1}^{n} \sigma_i^2 = \frac{\sigma^2}{n}
+	\end{displaymath}
+	\begin{displaymath}
+		I(\theta) = M [(\frac{\partial ln f_{\vec{X}}(\vec{X}, \theta)}{\partial \theta})^2]
+	\end{displaymath}
+	\begin{displaymath}
+		f_{\vec{X}}(\vec{X}, \theta) = f(X_1, \theta) \centerdot\dots \centerdot f(X_n, \theta)
+	\end{displaymath}
+	\begin{displaymath}
+		f(X_i, \theta) = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(X - \theta)^2}{2\sigma^2}}, \quad x \in \mathbb{R}
+	\end{displaymath}
+	\begin{displaymath}
+		f_{\vec{X}}(\vec{X}, \theta) = \frac{1}{(2\pi)^{\frac{n}{2}}\sigma^n} e^{-\frac{1}{2\sigma^2}\sum_{i=1}^{n}(X_i - \theta)^2}
+	\end{displaymath}
+	\begin{displaymath}
+		\ln f_{\vec{X}}(\vec{X}, \theta) = \ln (\frac{1}{(2\pi)^{\frac{n}{2}}\sigma^n}) - \frac{1}{2\sigma^2} \sum_{i=1}^{n}(X_i - \theta)^2
+	\end{displaymath}
+	\begin{displaymath}
+		(\frac{\partial \ln f_{\vec{X}}}{\partial \theta})^2 = \frac{1}{\sigma^4}(\sum_{i=1}^{n}(X_i - \theta) + 2\sum_{i=1}^{n}(X_i - \theta)(X_j - \theta))
+	\end{displaymath}
+	\begin{displaymath}
+		I(\theta) = \frac{1}{\sigma^4}[M[\sum_{i=1}^{n}(X_i - \theta)^2]] + 2 \sum_{i=1}^{n} M[(X_i - \theta)(X_j - \theta)] = \frac{n}{\sigma^2}
+	\end{displaymath}
+	\begin{displaymath}
+		D(\hat{\theta}) * I(\theta) = \frac{\sigma^2}{n} \centerdot\frac{n}{\sigma^2} = 1
+	\end{displaymath}
+\end{proof}
+
+\section{Методы построения точечных оценок}
+\subsection{Метод моментов}
+Пусть 
+\begin{enumerate}
+	\item $X$ -- случайная величина, закон распределения которой известен с точностью до вектора $\vec{\theta} = (\theta_1, \dots, \theta_r)$ неизвестных параметров
+	\item У случайной величины $X \quad \exists r$ первых моментов  
+\end{enumerate}
+Для построения точечных оценок параметров $\theta_1, \dots, \theta_n$ с использованием метода моментов необходимо сделать следующее: 
+\begin{enumerate}
+	\item найти выражения для r первых моментов теоретических моментов случайной величины X(так как функция распределения случайной величины X зависит от параметров $\theta_1, \dots, \theta_r$, то и теоретические моменты также будут зависеть от этих параметров):\\
+	$m_1(\theta_1, \dots, \theta_r) = M[X]$\\
+	$\vdots$\\
+	$m_n(\theta_1, \dots, \theta_r) = M[X^r]$
+	
+	\item Нужно приравнять выражения для теоретических моментов к их выборочным аналогам:\\
+	 $\left \{
+	 \begin{array}{ccc}
+	 	m_1(\theta_1, \dots, \theta_r)& = &\hat{m}(\vec{X})\\
+	 	\vdots\\
+	 	m_r(\theta_1, \dots, \theta_r) &= &\hat{m_r}(\vec{X})\\
+	 \end{array}
+	 \right.$
+\end{enumerate}
+Решаем полученную систему относительно неизвестных параметров:\\
+	 $\left \{
+\begin{array}{ccc}
+\theta_1 & = &\hat{\theta}(\vec{X})\\
+\vdots\\
+\theta_r &= &\hat{\theta_r}(\vec{X})\\
+\end{array}
+\right.$
+
+\begin{example}
+	$X \sim Exp(\lambda, \alpha)$\\
+	$f(x) = 
+	\begin{cases}
+	\lambda e^{-\lambda(x - \alpha)} & \text{если  $x > \alpha$}\\
+	0 & \text{иначе}\\
+	\end{cases}$\\
+	Найдем точечные моменты: 
+	\begin{displaymath}
+		m_1 = MX = \alpha + \frac{1}{\lambda}, \quad m_2 = M[X^2] = DX = \frac{1}{\lambda^2}
+	\end{displaymath}
+	Система:\\
+	 $\left \{
+\begin{array}{ccc}
+m_1 & = &\alpha + \frac{1}{\lambda} = \hat{m_1}(\vec{X}) = \overline{X} \\
+m_2 &= &\frac{1}{\lambda^2} = S^2(\vec{X}) = \hat{\nu_2}(\vec{X}) \\
+\end{array}
+\right.$
+
+$\hat{\lambda}(\vec{X}) = \frac{1}{S} = \frac{\sqrt{n - 1}}{\sqrt{\sum_{i=1}^{n}(X_i - \overline{X})^2}}$\\
+$\hat{\alpha}(\vec{X}) = \frac{1}{n}\sum_{i=1}^{n}X_i - \frac{1}{\sqrt{n - 1}}\sqrt{\sum_{i=1}^{n}(X_i - \overline{X})^2}$
+\end{example}
+\subsection{Метод максимального правдоподобия}
+Пусть Х -- случайная величина, закон распределения которой известен с точностью до вектора $\hat{\theta} = (\theta_1, \dots, \theta_r)$ неизвестных параметров.
+
+Требуется оценить (найти) значение вектора $\theta$.
+
+\begin{definition}
+	Функцией правдоподобия, отвечающей случайной выборке $\hat{X}(X_1, \dots, X_n)$, называется функция
+	\begin{center}
+		\centering
+		$L(\hat{X}, \hat{\theta}) = p(X_1, \hat{\theta}) \centerdot\dots \centerdot p(X_n, \theta)$, 
+	\end{center}
+где 
+\begin{itemize}
+	\item $p(X_i, \vec{\theta}) = P\{X = X_i\},$ если X -- дискретная случайная величина
+	\item $p(X_i, \vec{\theta}) = f(X_i, \vec{\theta}), $ где $f$ -- плотность распределения непрерывной случайной величины $X$
+\end{itemize}
+
+\end{definition}
+
+В методе максимального правдоподобия в качестве точечной оценки вектора параметров $\hat{\theta}$ используют то значение, которое доставляет функции правдоподобия максимальное значение. Таким образом, оценка максимального правдоподобия $\forall x \in \chi_n \quad L(\vec{X}, \hat{\vec{\theta}}) \geq L(\vec{X}, \vec{\theta}), \quad \vec{\theta} \in \Theta$.\\
+\begin{center}
+	\centering
+	$\hat{\vec{\theta}} = arg max_{\hat{\theta}} L(\vec{X}, \vec{\theta})$
+\end{center}  
+
+Для построения точечной оценки необходимо решить задачу 
+\begin{center}
+	\centering
+	$L(\vec{X}, \vec{\theta} \longrightarrow max_{\vec{\theta} \in \Theta})$,
+\end{center}
+вместо которой чаще решают задачу:
+\begin{center}
+	\centering
+	$ln L(\vec{X}, \vec{\theta}) \longrightarrow max_{\vec{\theta} \in \Theta}$
+\end{center}
+Если для функции $ln L$ выполнены соответствующие условия, то для нахождения значения $\vec{\theta}$ можно использовать систему уравнений:\\
+$\left \{
+\begin{array}{ccc}
+\frac{\partial ln L(\vec{X}, \vec{\theta})}{\partial \theta_1} = 0\\
+\vdots\\
+\frac{\partial ln L(\vec{X}, \vec{\theta})}{\partial \theta_r} = 0
+\end{array}
+\right.$
+
+\section{Доверительные интервалы}
+\begin{definition}
+	$\gamma - $ доверительным интервалом(доверительным интервалом уровня $\gamma$) для параметра $\theta$ называется пара статистик\\
+	\begin{center}
+		\centering
+		$\underline{\theta(\vec{X})}, \overline{\theta(\vec{X})}$, таких, что
+		\\$P\{\theta \in (\underline{\theta(\vec{X})}, \overline{\theta(\vec{X})})\} = \gamma $	
+	\end{center}
+\end{definition}	
+
+Пусть 
+\begin{enumerate}
+	\item $\theta$ -- неизвестный параметр закона распределения случайной величины X
+	\item $g(\vec{X}, \theta)$ --  некоторая статистика
+\end{enumerate}
+\begin{definition}
+	Статистику $g(\vec{X}, \theta)$ будем называть центральной, если закон  ее распределения не зависит от $\theta$, то есть
+	\begin{center}
+		\centering
+		$F_g(X, \theta) \equiv F_g(X)$, где $F_g$ -- функция распределения случайной величины $g$
+	\end{center}
+\end{definition}
+\newtheorem*{algo}{Общий алгоритм}
+\begin{algo}
+Пусть  
+\begin{enumerate}
+  \item $X$ -- случайная величина, закон распределения которой зависит от неизвестного параметра $\theta$
+  \item $g(\vec{X}, \theta)$ -- центральная статистика
+  \item $g(X, \theta)$  является монотонно возрастающей с увеличением  параметра $\theta$
+  \item $F_{g}(X, \theta)$ также монотонно возрастает с увеличением $\theta$
+  \item $\alpha_1 > 0, \alpha_2 > 0$  и таковы, что $\alpha_1 + \alpha_2 = 1 - \gamma$\\
+\end{enumerate}
+$\gamma = P\{q_{\alpha_1} < g(\vec{X}, \theta) < q_{1 - \alpha_2}\} = $ |g монотонно возрастает с ростом $\theta$| = $P\{g^{-1}(\vec{X}, q_{\alpha_1}) < \theta < g^{-1}(\vec{X}, q_{1 - \alpha_2})\}$.
+\end{algo}
+
+\newtheorem*{algo2}{Частные случаи}
+\begin{algo2}
+	$X \sim N(m, \sigma^2)$, где 
+	\begin{itemize}
+		\item m -- неизвестно
+		\item $\sigma^2$ -- известно
+	\end{itemize}
+$g(\vec{X}, m) = \frac{m - \overline{X}}{\sigma} \sqrt{n} \sim N(0,1)$, то есть $g(\vec{X}, m)$ --  центральная статистика.\\
+$\alpha_1 = \alpha_2 = \frac{1 - \gamma}{2} = $ |$1 - \gamma = \alpha$| = $\frac{\alpha}{2}$\\
+$\gamma = P\{-q_{1 - \frac{\alpha}{2}} < g(\vec{X}, m) < q_{1 - \frac{\alpha}{2}}\} = P\{-q_{1 - \frac{\alpha}{2}} < \frac{m - \overline{X}}{\sigma} \sqrt{n} < q_{1 - \frac{\alpha}{2}} \} = P\{\overline{X} - \frac{\sigma q_{1 - \frac{\alpha}{2}}}{\sqrt{n}} < m < \overline{X} + \frac{\sigma q_{1 - \frac{\alpha}{2}}}{\sqrt{n}}\}$\\
+Если неизвестны оба параметра  m и $\sigma^2$, то при построении доверительных интервалов для этих параметров:
+ \begin{center}
+ 	\item $g(\vec{X}, m) = \frac{m - \overline{X}}{S(\vec{X})} \sqrt(n) \sim St(n - 1)$
+ 	\item $g(\vec{X}, m) = \frac{S(\vec{X})^2}{\sigma^2}(n - 1) \sim \chi^2(n - 1)$ 
+ \end{center}
+\end{algo2}
+\end{document}
