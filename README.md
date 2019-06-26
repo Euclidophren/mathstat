@@ -1,6 +1,25 @@
-# mathstat
-Математическая статистика: ботва к РК и лабы
+<h1 align="center">Welcome to Mathematical Statistics 👋</h1>
+<p>
+  <img src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
+</p>
 
-Текущий статус: сданы ДЗ №№1-2, РК№№1-2.
+> Математическая статистика: ботва к РК и лабы
 
-UPD: файлы с ботвой к РК будут обновляться только при наличии ишью.
+## Install
+
+```sh
+npm install
+```
+
+## Author
+
+👤 **Euclidophren(aka NeoIsALie**
+
+* Github: [@Euclidophren](https://github.com/Euclidophren)
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
