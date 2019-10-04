@@ -45,7 +45,7 @@
     \begin{proof}
     	Для случая непрерывной случайной величины Х(для случая дискретной случайной величины Х доказательство аналогично)\\
     	$MX = \int_{-\infty}^{+\infty} xf(x)dx = |X \geq 0| = \int_{0}^{+\infty} xf(x)dx = \int_{0}^{\varepsilon} xf(x)dx + \int_{\varepsilon}^{+\infty} xf(x)dx \geq
-    	\int_{\varepsilon}^{+\infty}xf(x)dx \geq |x \in [\varepsilon, +\infty) \rightarrow x \geq \varepsilon| \geq \varepsilon \int_{\varepsilon}^{+\infty} f(x)dx \geq \varepsilon P\{ x\geq \varepsilon\}$
+    	\int_{\varepsilon}^{+\infty}xf(x)dx \geq |x \in [\varepsilon, +\infty) \rightarrow x \geq \varepsilon| \geq \varepsilon \int_{\varepsilon}^{+\infty} f(x)dx \geq \varepsilon P\{ X\geq \varepsilon\}$
     	\begin{displaymath}
     	\int_{\varepsilon}^{+\infty} f(x)dx = P\{X \geq \varepsilon\}
     	\end{displaymath}
@@ -71,7 +71,7 @@
 		\item Используем $P \{ Y \geq \delta\} \leq \frac{MY}{\delta}$ для $\delta = \varepsilon^2$
 	\end{enumerate}
 	\begin{displaymath}
-		DX = M[(X - MX)^2] = \delta P\{(X - MX)^2 \geq \delta\} = \varepsilon^2 P\{(X - MX)^2 \geq \varepsilon^2\} = \varepsilon^2 P\{|X - MX| \geq \varepsilon\}
+		DX = M[(X - MX)^2] \geq \delta P\{(X - MX)^2 \geq \delta\} = \varepsilon^2 P\{(X - MX)^2 \geq \varepsilon^2\} = \varepsilon^2 P\{|X - MX| \geq \varepsilon\}
 	\end{displaymath}
 	Таким образом, $DX \geq \varepsilon^2 P\{|X - MX| \geq \varepsilon\} \Longrightarrow P\{|X - MX|\geq \varepsilon\} \leq \frac{DX}{\varepsilon^2}$
 \end{proof}
@@ -116,7 +116,7 @@
 		\item Дисперсия случайных величин $\infseqX$ ограничена в совокупности, то есть
 		\begin{center}
 			\centering
-			$\forall c > 0 \quad \sigma_i^2 \leq c, \quad i \in N$
+			$\exists c > 0 \quad \sigma_i^2 \leq c, \quad i \in N$
 		\end{center}
 	\end{enumerate}
 Тогда последовательность $\infseqX$ удовлетворяет закону больших чисел.
@@ -132,11 +132,11 @@
 			M[\overline{X_n}] = \frac{1}{n} \sum_{i=1}^{n} m_i
 		\end{displaymath}
 		\begin{displaymath}
-			D[\overline{X_n}] = D[\frac{1}{n} \sum_{i=1}^{n} X_i] = \frac{1}{n^2} D[\sum_{i = 1}^{n}X_i] = \frac{1}{n^2}DX_i = \frac{1}{n^2} \sigma_i^2
+			D[\overline{X_n}] = D[\frac{1}{n} \sum_{i=1}^{n} X_i] = \frac{1}{n^2} D[\sum_{i = 1}^{n}X_i] = \frac{1}{n^2}\sum_{i=1}^{n}DX_i = \frac{1}{n^2} \sum_{i = 1}^{n}\sigma_i^2
 		\end{displaymath}
 		\item Применим к случайной величине $\overline{X_n}$ второе неравенство Чебышева
 		\begin{displaymath} 
-			P\{|\overline{X_n} - M\overline{X_n} \geq \varepsilon\} \leq \frac{D\overline{X_n}}{\varepsilon^2}
+			P\{|\overline{X_n} - M\overline{X_n}| \geq \varepsilon\} \leq \frac{D\overline{X_n}}{\varepsilon^2}
 		\end{displaymath}
 	\end{enumerate}
 Таким образом, 
@@ -209,10 +209,9 @@ P\{|\overline{X_n} - \frac{1}{n}\sum_{i=1}^{n} m_i|\geq \varepsilon\} \leq \frac
     \item $X_i$ независимы, так как отдельные испытания в схеме испытаний Бернулли независимы
     \end{itemize}
 	    \item Таким образом, последовательность $\infseqX$ удовлетворяет следствию 1 из теоремы Чебышева и для нее справедливо
-	    \begin{center}
-	    	\centering
-	    	$\forall \varepsilon > 0 \quad P\{|\frac{1}{n}\sum_{i=1}^{n}X_i - m|\geq \varepsilon\} \xlongrightarrow[n \rightarrow \infty]{} 0$
-	    \end{center}
+	    \begin{displaymath}
+	    	\forall \varepsilon > 0 \quad P\{|\frac{1}{n}\sum_{i=1}^{n}X_i - m|\geq \varepsilon\} \xlongrightarrow[n \rightarrow \infty]{} 0
+	    \end{displaymath}
     \begin{center}
     	\centering
     	$\forall \varepsilon > 0 \quad P\{|r_n - p| \geq \varepsilon\} \xlongrightarrow[n \rightarrow \infty]{} 0$, то есть $r_n \xlongrightarrow[n \rightarrow \infty] {P} p$
@@ -257,7 +256,7 @@ P\{|\overline{X_n} - \frac{1}{n}\sum_{i=1}^{n} m_i|\geq \varepsilon\} \leq \frac
 Тогда 
 \begin{displaymath}
 	P\{k_1 \leq k \leq k_2\} \approx \Phi(x_2) - \Phi(x_1), \quad  x_i = \frac{k_i - np}{\sqrt{npq}}, \quad i = \overline{1,2}, \quad q = 1 - p, \quad 
-	\Phi(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{\frac{-t^2}{2}}
+	\Phi(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{\frac{-t^2}{2}} dt
 \end{displaymath}
 \end{mlap}
 \begin{proof}
@@ -349,8 +348,7 @@ P\{|\overline{X_n} - \frac{1}{n}\sum_{i=1}^{n} m_i|\geq \varepsilon\} \leq \frac
 	\end{displaymath}
 	где 
 	\begin{itemize}
-		\item $\vec{X}_n = (X_1, \ldots, X_n)$ --- случайная выборка;
-		\item $\vec{x} = (x_1, \dots, x_n)$ --- реализация случайной выборки $\vec{X}_n$;
+		\item $\vec{x} = (x_1, \dots, x_n)$ --- выборка из генеральной совокупности $\vec{X}_n$;
 		\item $n(x, \vec{x})$ --- количество элементов выборки $\vec{x}$, которые меньше $x$.
 	\end{itemize}
 \end{definition}
@@ -438,13 +436,13 @@ P\{|\overline{X_n} - \frac{1}{n}\sum_{i=1}^{n} m_i|\geq \varepsilon\} \leq \frac
 
 Качество используемой точечной оценки $\hat{\theta}(\vec{X})$ параметра $\theta$ характеризуют следующие свойства:
 \begin{enumerate}
-	\item несмещаемость
+	\item несмещенность
 	\item состоятельность 
 	\item эффективность
 \end{enumerate}
 
 \begin{definition}
-	Оценка $\hat{\theta}(\vec{x})$ параметра $\theta$ называется несмещенной, если 
+	Точечная оценка $\hat{\theta}(\vec{X})$ параметра $\theta$ называется несмещенной, если 
 	\begin{center}
 		\centering $\exists M[\hat{\theta}(\vec{X})] = \theta$
 	\end{center}
@@ -457,7 +455,7 @@ P\{|\overline{X_n} - \frac{1}{n}\sum_{i=1}^{n} m_i|\geq \varepsilon\} \leq \frac
 		\item $\sigma^2 = DX$
 		\item $\hat{\sigma^2}(\vec{X}) = \frac{1}{n} \sum_{i=1}^{n} (X_i - \overline{X})^2$
 	\end{itemize}
-$M[\hat{\sigma^2}(\vec{X})] = M[\frac{1}{n}  \sum_{i=1}^{n} (X_i - \overline{X})^2] = \frac{1}{n} M[ \sum_{i=1}^{n} (X_i - \overline{X})^2] = \frac{1}{n} \sum_{i=1}^{n} M[(X_i - \overline{X})^2] = \frac{1}{n}  \sum_{i=1}^{n} M[(X_i - \frac{1}{n}\sum_{i=1}^{n}X_j)^2] = \frac{1}{n}\sum_{i=1}^{n} M[((X_i - m) - \frac{1}{n} \sum_{j=1}^{n}(X_j - m))^2] = \frac{1}{n} \sum_{i=1}^{n} M [(X_i - m)^2 - \frac{2}{n} \sum_{i=1}^{n}(X_j - m)(X_i - m) + \frac{1}{n^2} (\sum_{j=1}^{n}(X_j - m) )^2] = \frac{1}{n} \sum_{i=1}^{n}\{M [(X_i - m)^2] - \frac{2}{n} \sum_{j=1}^{n} M[(X_i - m)(X_j - m)] + \frac{1}{n^2} \sum_{j=1}^{n} M [(X_j - m)^2 + \frac{1}{n^2} \sum_{j,k=1, k \neq j}^{n}M[(X_k - m)(X_j - m)]] = \frac{1}{n} \sum_{i=1}^{n}\{ \sigma^2 - \frac{2}{n} \sigma^2 + \frac{1}{n^2} \sum_{j=1}^{n} \sigma^2\} = \frac{1}{n} \centerdot n \{ \sigma^2 - \frac{2}{n} \sigma^2 + \frac{1}{n} \sigma^2\} = \sigma^2 - \frac{1}{n} \sigma^2 = \sigma^2 (1 - \frac{1}{n}) = \sigma^2 \frac{n - 1}{n} \neq \sigma^2$
+$M[\hat{\sigma^2}(\vec{X})] = M[\frac{1}{n}  \sum_{i=1}^{n} (X_i - \overline{X})^2] = \frac{1}{n} M[ \sum_{i=1}^{n} (X_i - \overline{X})^2] = \frac{1}{n} \sum_{i=1}^{n} M[(X_i - \overline{X})^2] = \frac{1}{n}  \sum_{i=1}^{n} M[(X_i - \frac{1}{n}\sum_{j=1}^{n}X_j)^2] = \frac{1}{n}\sum_{i=1}^{n} M[((X_i - m) - \frac{1}{n} \sum_{j=1}^{n}(X_j - m))^2] = \frac{1}{n} \sum_{i=1}^{n} M [(X_i - m)^2 - \frac{2}{n} \sum_{j=1}^{n}(X_j - m)(X_i - m) + \frac{1}{n^2} (\sum_{j=1}^{n}(X_j - m) )^2] = \frac{1}{n} \sum_{i=1}^{n}\{M [(X_i - m)^2] - \frac{2}{n} \sum_{j=1}^{n} M[(X_i - m)(X_j - m)] + \frac{1}{n^2} \sum_{j=1}^{n} M [(X_j - m)^2 + \frac{1}{n^2} \sum_{j,k=1, k \neq j}^{n}M[(X_k - m)(X_j - m)]] = \frac{1}{n} \sum_{i=1}^{n}\{ \sigma^2 - \frac{2}{n} \sigma^2 + \frac{1}{n^2} \sum_{j=1}^{n} \sigma^2\} = \frac{1}{n} \centerdot n \{ \sigma^2 - \frac{2}{n} \sigma^2 + \frac{1}{n} \sigma^2\} = \sigma^2 - \frac{1}{n} \sigma^2 = \sigma^2 (1 - \frac{1}{n}) = \sigma^2 \frac{n - 1}{n} \neq \sigma^2$
 \end{proof}
 \begin{definition}
 	Статистику $S^2(\vec{X})$ называется исправленной выборочной дисперсией и равна\\
@@ -495,7 +493,7 @@ $M[\hat{\sigma^2}(\vec{X})] = M[\frac{1}{n}  \sum_{i=1}^{n} (X_i - \overline{X})
 	Пусть
 	\begin{enumerate}
 		\item $X \sim N(m, \sigma^2)$, m и $\sigma^2$ неизвестны
-		\item $\hat{m}(\vec{X}) = X_1$ -- результат наблюдения -- точечная оценка для m
+		\item $\hat{m}(\vec{X}) = X_1$ -- результат первого наблюдения -- точечная оценка для m
 	\end{enumerate}
 Покажем, что $\hat{m}$ -- несостоятельная оценка.\\
 Зафиксируем $\varepsilon > 0$ \\
@@ -525,11 +523,11 @@ $P\{|\hat{m}(\vec{X}) - m| < \varepsilon\} = P\{|X_1 - m| < \varepsilon\} = $|$X
 	\begin{enumerate}
 		\item Линейная оценка имеет вид:
 		 \begin{equation*}
-		 	\hat{m}(\vec{X}) = \lambda_1 x_1 + \dots + \lambda_n x_n, \quad \lambda_j \in \mathbb{R}
+		 	\hat{m}(\vec{X}) = \lambda_1 X_1 + \dots + \lambda_n X_n, \quad \lambda_j \in \mathbb{R}
 		 \end{equation*}
 		\item Так как оценка должна быть несмещенной
 		\begin{equation*}
-		M[\hat{m}(\vec{X})] = M[\sum_{i=1}^{n} \lambda_i x_i] = \sum_{i=1}^{n} \lambda_i MX_i = \sum_{i=1}^{m}\lambda_i m = m \sum_{i=1}^{n} \lambda_i
+		M[\hat{m}(\vec{X})] = M[\sum_{i=1}^{n} \lambda_i X_i] = \sum_{i=1}^{n} \lambda_i MX_i = \sum_{i=1}^{m}\lambda_i m = m \sum_{i=1}^{n} \lambda_i
 		\end{equation*}
 	\end{enumerate}
 Требуется $M[\hat{m}(\vec{X})] = m \Longrightarrow \sum_{i=1}^{n} \lambda_i = 1$.
@@ -541,7 +539,7 @@ $P\{|\hat{m}(\vec{X}) - m| < \varepsilon\} = P\{|X_1 - m| < \varepsilon\} = $|$X
  
 $\left \{
 \begin{array}{ccc}
-f(\lambda_1 \dots, \lambda_n) \centerdot \sum_{i=1}^{n} \lambda_i \longrightarrow min\\
+f(\lambda_1 \dots, \lambda_n) = \sum_{i=1}^{n} \lambda_i^2 \longrightarrow min\\
 \vdots\\
 \sum_{i=1}^{n} \lambda_i = 1\\
 \end{array}
@@ -567,7 +565,7 @@ $\lambda_i = \frac{\mu}{2}, \quad i = \overline{1, n}$.
 
 $\sum_{i=1}^{n} \frac{\mu}{2} = 1,\quad \frac{\mu n }{2} = 1 \Longrightarrow  \mu = \frac{2}{n} \Longrightarrow \quad \lambda_i = \frac{1}{n}$.\newline
 
-Можно проверить достаточное условие экстремума так, что 
+Можно, проверив достаточное условие экстремума, показать, что 
 $(\frac{1}{n}, \dots, \frac{1}{n})$ является условным минимумом $f(\lambda_1, \dots, \lambda_n)$ таким образом, линейная оценка с наименьшей дисперсией 
 \begin{equation*}
 	\hat{m}(\vec{X}) = \sum_{i=1}^{n}\frac{1}{n} X_i = \frac{1}{n} \sum_{i=1}^{n}X_i = \overline{X}
@@ -727,7 +725,7 @@ $a^2 = \frac{1}{2} [a^2 + cov(\hat{\theta_1}, \hat{\theta_2})] \Longrightarrow c
 	\item $X$ -- случайная величина, закон распределения которой известен с точностью до вектора $\vec{\theta} = (\theta_1, \dots, \theta_r)$ неизвестных параметров
 	\item У случайной величины $X \quad \exists r$ первых моментов  
 \end{enumerate}
-Для построения точечных оценок параметров $\theta_1, \dots, \theta_n$ с использованием метода моментов необходимо сделать следующее: 
+Для построения точечных оценок параметров $\theta_1, \dots, \theta_r$ с использованием метода моментов необходимо сделать следующее: 
 \begin{enumerate}
 	\item найти выражения для r первых моментов теоретических моментов случайной величины X(так как функция распределения случайной величины X зависит от параметров $\theta_1, \dots, \theta_r$, то и теоретические моменты также будут зависеть от этих параметров):\\
 	$m_1(\theta_1, \dots, \theta_r) = M[X]$\\
